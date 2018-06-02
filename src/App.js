@@ -16,16 +16,19 @@ class App extends Component {
   }
 
   render() {
+
     let sens = this.state.theData.map((item, key) => {
       return (
-        <div className="col-6 col-md-4 border red" key={key}>
+        <div className={"col-6 col-md-4 border " + this.getClass(item['id'])} key={key}>
           <p>{item['description']}</p>
           <h1 className="text-center">{item['raw_value']}</h1>
           <p className="text-center">{item['unit']}</p>
           <p className="text-right">{item['name']}</p>
+          {item['id']}
         </div>
       );
     });
+
     return (
       <div className="container">
       <div id="demo">
@@ -65,6 +68,18 @@ class App extends Component {
         </div>
       </div>
     );
+  }
+
+  getClass(id){
+    console.log(id)
+    if (id === 14 || id === 18) { return 'yellow'; }
+    if (id === 7) { return 'red'; }
+    if (id === 12) { return 'green'; }
+    if (id === 17) { return 'black'; }
+    if (id === 13) { return 'blue_light'; }
+    if (id === 15) { return 'grey_darker'; }
+    if (id === 21) { return 'grey'; }
+    return 'blue';
   }
 
   componentDidMount(){
