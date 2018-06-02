@@ -1,0 +1,53 @@
+
+h1,h2,h3,p{
+  font-family: 'Kanit', sans-serif;
+}
+
+.border{
+  border: 2px solid black !important;
+}
+
+.black{
+  background-color: #2E2E2E;
+  color: white;
+}
+.blue{
+  background-color: #0019FF;
+  color: white;
+}
+.blue_light{
+  background-color: #65E3F4;
+  color: black;
+}
+.green{
+  background-color: #00E597;
+  color: black;
+}
+.grey{
+  background-color: #D2D3D5;
+  color: black;
+}
+.grey_lightest{
+  background-color: #F9F9FB;
+  color: black;
+}
+.grey_lighter{
+  background-color: #ECECEE;
+  color: black;
+}
+.grey_darker{
+  background-color: #6E6E6E;
+  color: black;
+}
+.grey_darkest{
+  background-color: #7E7E7E;
+  color: black;
+}
+.yellow{
+  background-color: #FFC100;
+  color: black;
+}
+.red{
+  background-color: #FF3D4C;
+  color: black;
+}

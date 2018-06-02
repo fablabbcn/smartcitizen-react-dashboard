@@ -5,27 +5,33 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      city:0,
-      description: '',
       hasData: false,
-      id: 3,
-      owner: '',
-      sensorDescription: '',
-      sensorType: '',
-      sensorValue: '',
       targetId: 2440,
-      username: '',
+      owner: [],
+      theData: [],
+      theKit: []
     };
     this.getSensorData = this.getSensorData.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
+
   render() {
+    let sens = this.state.theData.map((item, key) => {
+      return (
+        <div className="col-6 col-md-4 border red" key={key}>
+          <p>{item['description']}</p>
+          <h1 className="text-center">{item['raw_value']}</h1>
+          <p className="text-center">{item['unit']}</p>
+          <p className="text-right">{item['name']}</p>
+        </div>
+      );
+    });
     return (
       <div className="container">
-        <div id="demo">
-          Geolocation:
-          <hr />
-        </div>
+      <div id="demo">
+        Geolocation:
+        <hr />
+      </div>
 
         <div className="row">
 
@@ -38,45 +44,50 @@ class App extends Component {
             <table>
               <thead></thead>
               <tbody>
-                <tr><td>City</td><td>{this.state.city} </td></tr>
-                <tr><td>Description:</td><td> {this.state.description} </td></tr>
                 <tr><td>Have data</td><td> {this.state.hasData ? 'Yes' : 'No'} </td></tr>
-                <tr><td>Kit ID</td><td>{this.state.id} </td></tr>
-                <tr><td>Owner</td><td>{this.state.owner} </td></tr>
-                <tr><td>Name</td><td>{this.state.name} </td></tr>
-                <tr><td>SensorDescription</td><td> {this.state.sensorDescription} </td></tr>
-                <tr><td>SensorType</td><td> {this.state.sensorType} </td></tr>
-                <tr><td>SensorValue</td><td>{this.state.sensorValue} </td></tr>
-                <tr><td>Username</td><td>{this.state.username} </td></tr>
+
+                <tr><td>Description:</td><td> {this.state.description} </td></tr>
+
+                <tr><td>Kit Name</td><td>{this.state.theKit['name']} </td></tr>
+                <tr><td>Kit ID</td><td>{this.state.theKit['id']} </td></tr>
+
+                <tr><td>Owner id</td><td>{this.state.owner['id']} </td></tr>
+                <tr><td>Username</td><td>{this.state.owner['username']} </td></tr>
               </tbody>
             </table>
+            {console.log('type', typeof this.state.theData)}
+            {console.log(this.state.theData)}
           </div>
         </div>
 
+        <div className="row">
+          {sens}
+        </div>
       </div>
     );
+  }
+
+  componentDidMount(){
+    this.getSensorData();
   }
 
   handleChange(event){
     this.setState({targetId: event.target.value})
   }
+
   getSensorData(){
-    console.log('fetching data...');
+    //console.log('fetching data...');
     return fetch('https://api.smartcitizen.me/v0/devices/' + this.state.targetId)
       .then((response) =>  response.json())
       .then((responseJson) => {
-        console.log(responseJson);
+        //console.log(responseJson);
+        //console.log( typeof responseJson);
         this.setState({
           hasData: true,
-          id: responseJson['id'],
-          username: responseJson['owner']['username'],
-          owner: responseJson['owner']['username'],
-          city: responseJson['owner']['location']['city'],
-          description: responseJson['description'],
-          name: responseJson['name'],
-          sensorType: responseJson['data']['sensors'][0]['name'],
-          sensorDescription: responseJson['data']['sensors'][0]['description'],
-          sensorValue: responseJson['data']['sensors'][0]['raw_value'],
+          owner: responseJson.owner,
+          theData: responseJson.data.sensors,
+          theKit: responseJson.kit,
+          description: responseJson.description,
         });
       })
   }
