@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Kit from './Kit.js';
 
 class App extends Component {
   constructor(props){
@@ -17,17 +18,6 @@ class App extends Component {
 
   render() {
 
-    let sens = this.state.theData.map((item, key) => {
-      return (
-        <div className={"col-6 col-md-4 border " + this.getClass(item['id'])} key={key}>
-          <p>{item['description']}</p>
-          <h1 className="text-center">{item['raw_value']}</h1>
-          <p className="text-center">{item['unit']}</p>
-          <p className="text-right">{item['name']}</p>
-          {item['id']}
-        </div>
-      );
-    });
 
     return (
       <div className="container">
@@ -48,39 +38,29 @@ class App extends Component {
               <thead></thead>
               <tbody>
                 <tr><td>Have data</td><td> {this.state.hasData ? 'Yes' : 'No'} </td></tr>
-
                 <tr><td>Description:</td><td> {this.state.description} </td></tr>
-
                 <tr><td>Kit Name</td><td>{this.state.theKit['name']} </td></tr>
                 <tr><td>Kit ID</td><td>{this.state.theKit['id']} </td></tr>
-
                 <tr><td>Owner id</td><td>{this.state.owner['id']} </td></tr>
                 <tr><td>Username</td><td>{this.state.owner['username']} </td></tr>
               </tbody>
             </table>
-            {console.log('type', typeof this.state.theData)}
-            {console.log(this.state.theData)}
           </div>
         </div>
 
         <div className="row">
-          {sens}
+          {
+            this.state.theData.map((item, key) => {
+              return(
+                <Kit data={item} key={key}/>
+              )
+            })
+          }
         </div>
       </div>
     );
   }
 
-  getClass(id){
-    console.log(id)
-    if (id === 14 || id === 18) { return 'yellow'; }
-    if (id === 7) { return 'red'; }
-    if (id === 12) { return 'green'; }
-    if (id === 17) { return 'black'; }
-    if (id === 13) { return 'blue_light'; }
-    if (id === 15) { return 'grey_darker'; }
-    if (id === 21) { return 'grey'; }
-    return 'blue';
-  }
 
   componentDidMount(){
     this.getSensorData();
