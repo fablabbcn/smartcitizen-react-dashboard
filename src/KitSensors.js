@@ -16,7 +16,7 @@ class KitSensors extends Component{
   render(){
     let item = this.props.data;
     return(
-      <div className={"p-3 col-6 col-md-4 " + this.getClass(item['id']) }  >
+      <div className={"p-3 col-6 col-md-4 col-xl-3 " + this.getClass(item['id']) }  >
         <p>{item['description']} {/* item['id'] */}</p>
         <h1 className="text-center">{item['value']}</h1>
         <p className="text-center">{item['unit']}</p>

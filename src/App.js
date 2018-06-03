@@ -23,24 +23,15 @@ class App extends Component {
     return (
       <div className="container-fluid">
         <div id="demo">
-          Geolocation:
+          Geolocation: TODO
           <hr />
         </div>
 
         <div className="row">
-          <div className="col-6  mx-auto">
+          <div className="col-6 mx-auto text-center">
             <input type="text" onChange={this.handleChange} value={this.state.targetId}/>
             <button onClick={this.getSensorData}> Get data </button>
-          </div>
-
-          <div className="col-12">
-            <table>
-              <thead></thead>
-              <tbody>
-                <tr><td>Have data</td><td> {this.state.hasData ? 'Yes' : 'No'} </td></tr>
-                <tr><td>Description:</td><td> {this.state.description} </td></tr>
-              </tbody>
-            </table>
+            <p> hasData: {this.state.hasData ? 'Yes' : 'No'} </p>
           </div>
         </div>
 
@@ -90,7 +81,6 @@ class App extends Component {
           owner: responseJson.owner,
           theData: responseJson.data.sensors,
           theKit: responseJson.kit,
-          description: responseJson.description,
         });
       })
   }
