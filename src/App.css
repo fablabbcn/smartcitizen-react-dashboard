@@ -7,47 +7,47 @@ body{
   border: 2px solid black !important;
 }
 
-.black{
+.bg-black{
   background-color: #2E2E2E;
   color: white;
 }
-.blue{
+.bg-blue{
   background-color: #0019FF;
   color: white;
 }
-.blue_light{
+.bg-blue_light{
   background-color: #65E3F4;
   color: black;
 }
-.green{
+.bg-green{
   background-color: #00E597;
   color: black;
 }
-.grey{
+.bg-grey{
   background-color: #D2D3D5;
   color: black;
 }
-.grey_lightest{
+.bg-grey_lightest{
   background-color: #F9F9FB;
   color: black;
 }
-.grey_lighter{
+.bg-grey_lighter{
   background-color: #ECECEE;
   color: black;
 }
-.grey_darker{
+.bg-grey_darker{
   background-color: #6E6E6E;
   color: black;
 }
-.grey_darkest{
+.bg-grey_darkest{
   background-color: #7E7E7E;
   color: black;
 }
-.yellow{
+.bg-yellow{
   background-color: #FFC100;
   color: black;
 }
-.red{
+.bg-red{
   background-color: #FF3D4C;
   color: black;
 }

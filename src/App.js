@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Kit from './Kit.js';
+import KitSensors from './KitSensors.js';
 
 class App extends Component {
   constructor(props){
@@ -52,7 +52,7 @@ class App extends Component {
           {
             this.state.theData.map((item, key) => {
               return(
-                <Kit data={item} key={key}/>
+                <KitSensors data={item} key={key}/>
               )
             })
           }
