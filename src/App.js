@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import KitSensors from './KitSensors.js';
+import KitOwner from './KitOwner.js';
+import KitInfo from './KitInfo.js';
 
 class App extends Component {
   constructor(props){
@@ -18,17 +20,15 @@ class App extends Component {
 
   render() {
 
-
     return (
-      <div className="container">
-      <div id="demo">
-        Geolocation:
-        <hr />
-      </div>
+      <div className="container-fluid">
+        <div id="demo">
+          Geolocation:
+          <hr />
+        </div>
 
         <div className="row">
-
-          <div className="col-6">
+          <div className="col-6 ">
             <input type="text" onChange={this.handleChange} value={this.state.targetId}/>
             <button onClick={this.getSensorData}> Get data </button>
           </div>
@@ -39,16 +39,24 @@ class App extends Component {
               <tbody>
                 <tr><td>Have data</td><td> {this.state.hasData ? 'Yes' : 'No'} </td></tr>
                 <tr><td>Description:</td><td> {this.state.description} </td></tr>
-                <tr><td>Kit Name</td><td>{this.state.theKit['name']} </td></tr>
-                <tr><td>Kit ID</td><td>{this.state.theKit['id']} </td></tr>
-                <tr><td>Owner id</td><td>{this.state.owner['id']} </td></tr>
-                <tr><td>Username</td><td>{this.state.owner['username']} </td></tr>
               </tbody>
             </table>
           </div>
         </div>
 
+        <div className="row border p-3 m-2">
+          <div className="col-12 col-md-6">
+            <KitInfo data={this.state.theKit} />
+          </div>
+          <div className="col-12 col-md-6">
+            <KitOwner data={this.state.owner} />
+          </div>
+        </div>
+
         <div className="row">
+          <div className="col-12">
+            <h3 className="text-center">Kit Sensors</h3>
+          </div>
           {
             this.state.theData.map((item, key) => {
               return(
