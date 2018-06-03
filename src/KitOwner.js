@@ -10,7 +10,7 @@ class KitOwner extends Component{
           <h3 className=""> Kit Owner </h3>
           <p>Owner id: {item['id']} </p>
           <p>{item['username']} </p>
-          <img src={item['avatar']} />
+          <img alt='avatar' src={item['avatar']} />
           <p>URL: {item['url']} </p>
         </div>
       </div>
