@@ -3,6 +3,7 @@ import './App.css';
 import KitSensors from './KitSensors.js';
 import KitOwner from './KitOwner.js';
 import KitInfo from './KitInfo.js';
+import KitList from './KitList.js';
 
 class App extends Component {
   constructor(props){
@@ -11,14 +12,18 @@ class App extends Component {
       hasData: false,
       targetId: 2440,
       isShowingKitInfo: false,
+      isShowingWorldmap: false,
       owner: [],
       theData: [],
       theSensors: [],
-      theKit: []
+      theKit: [],
+      worldmap: []
     };
     this.getSensorData = this.getSensorData.bind(this);
+    this.getWorldmap = this.getWorldmap.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
+    this.toggleShowWorldmap = this.toggleShowWorldmap.bind(this);
   }
 
   render() {
@@ -29,8 +34,20 @@ class App extends Component {
         TODO: Geolocation
         <hr />
 
+
         <div className="row">
-          <div className="col-6 mx-auto text-center">
+          <div className="col-12 text-right">
+            <button className="btn bg-black my-1" onClick={this.toggleShowWorldmap} >Toggle World map ({this.state.worldmap.length} items)</button>
+          </div>
+        </div>
+
+        {this.state.isShowingWorldmap &&
+          <KitList data={this.state.worldmap} />
+        }
+
+        <hr />
+        <div className="row">
+          <div className="col-12 col-md-6 mx-auto text-center">
             <input type="text" onChange={this.handleChange} value={this.state.targetId}/>
             <button className="btn bg-black my-1" onClick={this.getSensorData}> Get data </button>
             <p className={ "border " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.targetId}</p>
@@ -76,12 +93,27 @@ class App extends Component {
 
   componentDidMount(){
     this.getSensorData();
+    this.getWorldmap();
   }
 
   handleChange(event){
     this.setState({targetId: event.target.value}, () => {
       this.getSensorData()
     })
+  }
+
+  getWorldmap(){
+    console.log('fetching world map..')
+    return fetch('https://api.smartcitizen.me/v0/devices/world_map')
+      .then((response) =>  response.json())
+      .then((responseJson) => {
+        this.setState({
+          worldmap: responseJson,
+        });
+      }).catch(err => {
+        console.log(err)
+      })
+
   }
 
   getSensorData(e){
@@ -107,13 +139,14 @@ class App extends Component {
           //theSensors: [],
           //theKit: [],
         })
-        //console.log('error')
       })
   }
 
+  toggleShowWorldmap(){
+    this.setState({isShowingWorldmap: !this.state.isShowingWorldmap})
+  }
   toggleShowKitInfo(){
     this.setState({isShowingKitInfo: !this.state.isShowingKitInfo})
-    console.log(this.state.isShowingKitInfo)
   }
 
 }
