@@ -28,7 +28,7 @@ class App extends Component {
         </div>
 
         <div className="row">
-          <div className="col-6 ">
+          <div className="col-6  mx-auto">
             <input type="text" onChange={this.handleChange} value={this.state.targetId}/>
             <button onClick={this.getSensorData}> Get data </button>
           </div>
@@ -44,11 +44,11 @@ class App extends Component {
           </div>
         </div>
 
-        <div className="row border p-3 m-2">
-          <div className="col-12 col-md-6">
+        <div className="row border p-3">
+          <div className="col-6">
             <KitInfo data={this.state.theKit} />
           </div>
-          <div className="col-12 col-md-6">
+          <div className="col-6">
             <KitOwner data={this.state.owner} />
           </div>
         </div>
