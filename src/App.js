@@ -24,14 +24,15 @@ class App extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
     this.toggleShowWorldmap = this.toggleShowWorldmap.bind(this);
+    this.getGeoLocation = this.getGeoLocation.bind(this);
   }
 
   render() {
 
     return (
       <div className="container-fluid">
-
-        TODO: Geolocation
+        <button onClick={this.getGeoLocation}>Get GeoLocation</button>
+        <div id="geo">geolocation will appear here</div>
         <hr />
 
 
@@ -94,6 +95,7 @@ class App extends Component {
   componentDidMount(){
     this.getSensorData();
     this.getWorldmap();
+    //this.getGeoLocation();
   }
 
   handleChange(event){
@@ -140,6 +142,17 @@ class App extends Component {
           //theKit: [],
         })
       })
+  }
+
+  getGeoLocation(){
+    var x = document.getElementById("geo");
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position){
+        console.log(position.coords)
+        x.innerHTML = "Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude;
+      });
+    }
   }
 
   toggleShowWorldmap(){
