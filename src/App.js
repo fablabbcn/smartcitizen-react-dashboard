@@ -104,9 +104,10 @@ class App extends Component {
     })
   }
 
-  getWorldmap(){
+  getWorldmap(myurl){
+    // If no url is given, searches the world_map
     console.log('fetching world map..')
-    return fetch('https://api.smartcitizen.me/v0/devices/world_map')
+    return fetch(myurl || 'https://api.smartcitizen.me/v0/devices/world_map')
       .then((response) =>  response.json())
       .then((responseJson) => {
         this.setState({
@@ -115,7 +116,6 @@ class App extends Component {
       }).catch(err => {
         console.log(err)
       })
-
   }
 
   getSensorData(e){
@@ -146,13 +146,21 @@ class App extends Component {
 
   getGeoLocation(){
     var x = document.getElementById("geo");
+    var that = this;
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position){
         console.log(position.coords)
         x.innerHTML = "Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude;
+        that.getDeviceNear(position.coords.latitude, position.coords.longitude)
       });
     }
+  }
+
+  getDeviceNear(lat,lng){
+    let url = "https://api.smartcitizen.me/v0/devices?near=" + lat + "," + lng
+    console.log(url)
+    this.getWorldmap(url)
   }
 
   toggleShowWorldmap(){
