@@ -12,18 +12,18 @@ class App extends Component {
       hasData: false,
       targetId: 2440,
       isShowingKitInfo: false,
-      isShowingWorldmap: false,
+      isShowingDeviceList: true,
       owner: [],
       theData: [],
       theSensors: [],
       theKit: [],
-      worldmap: []
+      theDevices: []
     };
     this.getSensorData = this.getSensorData.bind(this);
-    this.getWorldmap = this.getWorldmap.bind(this);
+    this.getDevices = this.getDevices.bind(this);
     this.changeTargetId = this.changeTargetId.bind(this);
     this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
-    this.toggleShowWorldmap = this.toggleShowWorldmap.bind(this);
+    this.toggleShowDevices = this.toggleShowDevices.bind(this);
     this.getGeoLocation = this.getGeoLocation.bind(this);
 
     this.updateSelectedDevice = this.updateSelectedDevice.bind(this);
@@ -36,17 +36,17 @@ class App extends Component {
         <div className="row">
           <div className="col-12 col-md-6">
             <div className="row">
-              <div className="col-12 col-md-6 mx-auto text-center">
+              <div className="col-12 col-md-10 mx-auto text-center">
                 <input type="text" onChange={this.changeTargetId} value={this.state.targetId}/>
                 <button className="btn bg-black my-1" onClick={this.getSensorData}> Get data </button>
                 <p className={ "border " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.targetId}</p>
               </div>
             </div>
 
-
             <div className="row">
               <div className="col-12 text-right">
-                <button className="btn bg-black my-1" onClick={this.toggleShowKitInfo} > Toggle Kit & User Info </button>
+                <button className={"btn my-1 " + (this.state.isShowingKitInfo? "bg-grey" : "bg-black")}
+                  onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info </button>
               </div>
             </div>
 
@@ -79,17 +79,19 @@ class App extends Component {
 
           <div className="col-12 col-md-6">
 
-            <button onClick={this.getGeoLocation}>Get GeoLocation</button>
+            <button className="btn bg-blue mr-1" onClick={this.getGeoLocation}>Get nearby Devices</button>
+            <button className="btn bg-blue" onClick={this.getDevices}>Get ALL Devices</button>
             <div id="geo">geolocation will appear here</div>
 
             <div className="row">
               <div className="col-12 text-right">
-                <button className="btn bg-black my-1" onClick={this.toggleShowWorldmap} >Toggle World map ({this.state.worldmap.length} items)</button>
+                <button className={"btn bg-black my-1 " + (this.state.isShowingDeviceList ? 'bg-grey' : 'bg-black' ) }
+                  onClick={this.toggleShowDevices} > {this.state.isShowingDeviceList ? 'Hide' : 'Show'} Devices ({this.state.theDevices.length} items)</button>
               </div>
             </div>
 
-            {this.state.isShowingWorldmap &&
-                <KitList data={this.state.worldmap} handler={this.updateSelectedDevice}/>
+            {this.state.isShowingDeviceList &&
+                <KitList data={this.state.theDevices} handler={this.updateSelectedDevice}/>
             }
 
           </div>
@@ -102,7 +104,6 @@ class App extends Component {
 
   componentDidMount(){
     this.getSensorData();
-    //this.getWorldmap();
     //this.getGeoLocation();
   }
 
@@ -112,14 +113,20 @@ class App extends Component {
     })
   }
 
-  getWorldmap(myurl){
-    // If no url is given, searches the world_map
-    console.log('fetching world map..')
-    return fetch(myurl || 'https://api.smartcitizen.me/v0/devices/world_map')
+  getDevices(myurl){
+    // If no myurl is given (is not a string), search the world_map
+    let theUrl = 'https://api.smartcitizen.me/v0/devices/world_map'
+    if (typeof myurl === 'string'){
+      theUrl = myurl;
+    }
+
+    console.log('fetching: ', theUrl);
+
+    return fetch(theUrl)
       .then((response) =>  response.json())
       .then((responseJson) => {
         this.setState({
-          worldmap: responseJson,
+          theDevices: responseJson,
         });
       }).catch(err => {
         console.log(err)
@@ -131,8 +138,6 @@ class App extends Component {
     return fetch('https://api.smartcitizen.me/v0/devices/' + this.state.targetId)
       .then((response) =>  response.json())
       .then((responseJson) => {
-        //console.log(responseJson);
-        //console.log( typeof responseJson);
         this.setState({
           hasData: true,
           owner: responseJson.owner,
@@ -144,6 +149,7 @@ class App extends Component {
         console.log(err)
         this.setState({
           hasData: false,
+          // If we want to nullify data on errors
           //owner: [],
           //theData: [],
           //theSensors: [],
@@ -158,7 +164,6 @@ class App extends Component {
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position){
-        console.log(position.coords)
         x.innerHTML = "Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude;
         that.getDeviceNear(position.coords.latitude, position.coords.longitude)
       });
@@ -168,7 +173,7 @@ class App extends Component {
   getDeviceNear(lat,lng){
     let url = "https://api.smartcitizen.me/v0/devices?near=" + lat + "," + lng
     console.log(url)
-    this.getWorldmap(url)
+    this.getDevices(url)
   }
 
   updateSelectedDevice(id){
@@ -178,8 +183,8 @@ class App extends Component {
     });
   }
 
-  toggleShowWorldmap(){
-    this.setState({isShowingWorldmap: !this.state.isShowingWorldmap})
+  toggleShowDevices(){
+    this.setState({isShowingDeviceList: !this.state.isShowingDeviceList})
   }
 
   toggleShowKitInfo(){
