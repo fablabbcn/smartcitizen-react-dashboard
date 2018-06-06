@@ -7,10 +7,10 @@ class KitInfo extends Component{
       <div className="row">
         <div className="col-12">
           <h3 className=""> Kit Info </h3>
-          <p>{item['name']} </p>
-          <p>{item['slug']} </p>
-          <p>{item['description']} </p>
-          <p>{item['created_at']} </p>
+          <p>{item ? item['name'] : '' } </p>
+          <p>{item ? item['slug'] : '' } </p>
+          <p>{item ? item['description'] : '' } </p>
+          <p>{item ? item['created_at'] : '' } </p>
         </div>
       </div>
     );
