@@ -85,7 +85,8 @@ class App extends Component {
 
             <button className="btn bg-blue mr-1" onClick={this.getGeoLocation}>Get nearby Devices</button>
             <button className="btn bg-blue mr-1" onClick={this.getDevices}>Get ALL Devices</button>
-            <button className="btn bg-blue mr-1" onClick={() => this.getDevicesByTag('Streamr')}>Streamr</button>
+            <button className="btn bg-grey mr-1" onClick={() => this.getDevicesByTag('Streamr')}>Streamr Tag</button>
+            <button className="btn bg-grey mr-1" onClick={() => this.getDevicesByTag('Amsterdam')}>Amsterdam Tag</button>
             <div id="geo">(geolocation will appear here)</div>
 
             <div className="row">
@@ -123,7 +124,7 @@ class App extends Component {
 
   changeTargetTag(event){
     this.setState({targetTag: event.target.value}, () => {
-      console.log(this.state.targetTag)
+      ////console.log(this.state.targetTag)
     })
   }
 
@@ -185,13 +186,18 @@ class App extends Component {
   }
 
   getDevicesByTag(tag){
-    let url = "https://api.smartcitizen.me/v0/tags?name=" + this.state.targetTag;
-    console.log(url)
+    let url = '';
+    if (typeof tag === 'string') {
+      url = "https://api.smartcitizen.me/v0/devices?user_tags=" + tag;
+    }else{
+      url = "https://api.smartcitizen.me/v0/devices?user_tags=" + this.state.targetTag;
+    }
+    //console.log(url)
     this.getDevices(url)
   }
   getDevicesNear(lat,lng){
     let url = "https://api.smartcitizen.me/v0/devices?near=" + lat + "," + lng
-    console.log(url)
+    // console.log(url)
     this.getDevices(url)
   }
 

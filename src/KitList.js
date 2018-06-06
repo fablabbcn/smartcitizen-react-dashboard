@@ -9,20 +9,24 @@ class KitList extends Component{
         <div className="col-12">
           <p className="text-left">World Map</p>
         </div>
-        {item.map((x,y) => {
-          return(
-            <div key={y} className="col-4 col-md-6 col-lg-4 col-xl-2 border">
-              <button className="btn bg-black" onClick={() => this.props.handler(x['id'])} >{x['id']} </button>
-              <p>{x['last_reading_at']}</p>
-              <p>{x['city']} - {x['country_code']}</p>
-              <p>{x['description']}</p>
-              <p>{x['latitude']}</p>
-              <p>{x['longitude']}</p>
-              <p>{x['name']}({x['id']})</p>
-              <p>{x['owner_username']} ({x['owner_id']})</p>
-            </div>
-          )
-        })}
+        <table className="table table-sm table-bordered table-hover table-striped">
+          <tbody>
+            {item.map((x,y) => {
+              return(
+                <tr key={y} className="tr" onClick={() => this.props.handler(x['id'])} >
+                  <td><p>{x['id']} </p></td>
+                  <td><p>{x['last_reading_at']}</p></td>
+                  <td><p>{x['city']} - {x['country_code']}</p></td>
+                  <td><p>{x['description']}</p></td>
+                  <td><p>{x['latitude']}</p></td>
+                  <td><p>{x['longitude']}</p></td>
+                  <td><p>{x['name']}({x['id']})</p></td>
+                  <td><p>{x['owner_username']} ({x['owner_id']})</p></td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
       </div>
     )
   }
