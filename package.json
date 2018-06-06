@@ -5,8 +5,10 @@
   "homepage": "https://r.smartcitizen.me",
   "dependencies": {
     "gh-pages": "^1.2.0",
+    "plotly.js": "^1.38.2",
     "react": "^16.4.0",
-    "react-dom": "^16.4.0"
+    "react-dom": "^16.4.0",
+    "react-plotly.js": "^2.2.0"
   },
   "devDependencies": {
     "react-scripts": "1.1.4"

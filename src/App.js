@@ -5,6 +5,8 @@ import KitOwner from './KitOwner.js';
 import KitInfo from './KitInfo.js';
 import KitList from './KitList.js';
 
+import Plot from 'react-plotly.js';
+
 class App extends Component {
   constructor(props){
     super(props);
@@ -16,26 +18,47 @@ class App extends Component {
       isShowingDeviceList: true,
       owner: [],
       theData: [],
-      theSensors: [],
+      theDevices: [],
       theKit: [],
-      theDevices: []
+      theReading: [],
+      theSensors: []
     };
-    this.getSensorData = this.getSensorData.bind(this);
-    this.getDevices = this.getDevices.bind(this);
-    this.getDevicesByTag = this.getDevicesByTag.bind(this);
     this.changeTargetId = this.changeTargetId.bind(this);
     this.changeTargetTag = this.changeTargetTag.bind(this);
-    this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
-    this.toggleShowDevices = this.toggleShowDevices.bind(this);
+    this.getDevices = this.getDevices.bind(this);
+    this.getDevicesByTag = this.getDevicesByTag.bind(this);
     this.getGeoLocation = this.getGeoLocation.bind(this);
+    this.getReading = this.getReading.bind(this);
+    this.getSensorData = this.getSensorData.bind(this);
+    this.toggleShowDevices = this.toggleShowDevices.bind(this);
+    this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
 
     this.updateSelectedDevice = this.updateSelectedDevice.bind(this);
   }
 
   render() {
 
+    let xxx = [];
+    let yyy = [];
+
+    this.state.theReading.forEach(([x, y]) => {
+      xxx.push(x)
+      yyy.push(y)
+    })
+
     return (
       <div className="container-fluid">
+
+        <div className="row">
+          <div className="col-12 text-center">
+            <Plot
+              data={[ {type: 'bar', x: xxx, y: yyy}, ]}
+              layout={{width: 820, height: 440, title: 'A test Plot for device 1616'}}
+            />
+            <hr />
+          </div>
+        </div>
+
         <div className="row">
           <div className="col-12 col-md-6">
             <div className="row">
@@ -113,6 +136,7 @@ class App extends Component {
 
   componentDidMount(){
     this.getSensorData();
+    this.getReading();
     //this.getGeoLocation();
   }
 
@@ -199,6 +223,17 @@ class App extends Component {
     let url = "https://api.smartcitizen.me/v0/devices?near=" + lat + "," + lng
     // console.log(url)
     this.getDevices(url)
+  }
+
+  getReading(){
+    let url = " https://api.smartcitizen.me/v0/devices/1616/readings?sensor_id=7&rollup=4h&from=2015-07-28&to=2015-08-30";
+    return fetch(url)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          theReading: responseJson.readings
+        })
+      })
   }
 
   updateSelectedDevice(id){
