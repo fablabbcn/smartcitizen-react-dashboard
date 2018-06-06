@@ -11,6 +11,7 @@ class App extends Component {
     this.state = {
       hasData: false,
       targetId: 2440,
+      targetTag: '',
       isShowingKitInfo: false,
       isShowingDeviceList: true,
       owner: [],
@@ -21,7 +22,9 @@ class App extends Component {
     };
     this.getSensorData = this.getSensorData.bind(this);
     this.getDevices = this.getDevices.bind(this);
+    this.getDevicesByTag = this.getDevicesByTag.bind(this);
     this.changeTargetId = this.changeTargetId.bind(this);
+    this.changeTargetTag = this.changeTargetTag.bind(this);
     this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
     this.toggleShowDevices = this.toggleShowDevices.bind(this);
     this.getGeoLocation = this.getGeoLocation.bind(this);
@@ -38,7 +41,8 @@ class App extends Component {
             <div className="row">
               <div className="col-12 col-md-10 mx-auto text-center">
                 <input type="text" onChange={this.changeTargetId} value={this.state.targetId}/>
-                <button className="btn bg-black my-1" onClick={this.getSensorData}> Get data </button>
+                <button className="btn bg-black my-1" onClick={this.getSensorData}> Get id </button>
+                <br />
                 <p className={ "border " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.targetId}</p>
               </div>
             </div>
@@ -80,11 +84,15 @@ class App extends Component {
           <div className="col-12 col-md-6">
 
             <button className="btn bg-blue mr-1" onClick={this.getGeoLocation}>Get nearby Devices</button>
-            <button className="btn bg-blue" onClick={this.getDevices}>Get ALL Devices</button>
-            <div id="geo">geolocation will appear here</div>
+            <button className="btn bg-blue mr-1" onClick={this.getDevices}>Get ALL Devices</button>
+            <button className="btn bg-blue mr-1" onClick={() => this.getDevicesByTag('Streamr')}>Streamr</button>
+            <div id="geo">(geolocation will appear here)</div>
 
             <div className="row">
               <div className="col-12 text-right">
+                <input type="text" onChange={this.changeTargetTag} value={this.state.targetTag}/>
+                <button className="btn bg-black my-1" onClick={this.getDevicesByTag}> Get tag </button>
+                <br />
                 <button className={"btn bg-black my-1 " + (this.state.isShowingDeviceList ? 'bg-grey' : 'bg-black' ) }
                   onClick={this.toggleShowDevices} > {this.state.isShowingDeviceList ? 'Hide' : 'Show'} Devices ({this.state.theDevices.length} items)</button>
               </div>
@@ -110,6 +118,12 @@ class App extends Component {
   changeTargetId(event){
     this.setState({targetId: event.target.value}, () => {
       this.getSensorData()
+    })
+  }
+
+  changeTargetTag(event){
+    this.setState({targetTag: event.target.value}, () => {
+      console.log(this.state.targetTag)
     })
   }
 
@@ -165,12 +179,17 @@ class App extends Component {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position){
         x.innerHTML = "Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude;
-        that.getDeviceNear(position.coords.latitude, position.coords.longitude)
+        that.getDevicesNear(position.coords.latitude, position.coords.longitude)
       });
     }
   }
 
-  getDeviceNear(lat,lng){
+  getDevicesByTag(tag){
+    let url = "https://api.smartcitizen.me/v0/tags?name=" + this.state.targetTag;
+    console.log(url)
+    this.getDevices(url)
+  }
+  getDevicesNear(lat,lng){
     let url = "https://api.smartcitizen.me/v0/devices?near=" + lat + "," + lng
     console.log(url)
     this.getDevices(url)
