@@ -1,6 +1,31 @@
 import React, { Component } from 'react';
+import { ratioToRGB } from './utils/ratioToRGB';
 
 class KitSensors extends Component{
+
+  constructor(props) {
+    super(props);
+    this.state = { item: this.props.data };
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    const item = this.state.item;
+    item.value = item.value * .80;
+    this.setState({
+      item: item
+    });
+  }
 
   getClass(id){
     // Light sensor
@@ -15,20 +40,23 @@ class KitSensors extends Component{
     return 'bg-grey';
   }
 
+  getBgColor(id, value) {
+    const ratio = value < 100 ? value/100 : 1;
+    return { backgroundColor: `rgb(${ratioToRGB(ratio).join(',')})` };
+  }
+
   render(){
-    let item = this.props.data;
     return(
-      <div className={"p-3 col-6 col-xl-4 d-flex justify-content-between flex-column  " + this.getClass(item['id']) }  >
-        <p>{item['description']}</p>
+      <div className={"p-3 col-6 col-md-4 col-xl-3 d-flex justify-content-between flex-column"} style={ this.getBgColor(this.state.item['id'], this.state.item['value']) }  >
+        <p>{this.state.item['description']}</p>
         <div className="text-center my-3">
-          <h1 className="mb-0">{Math.round(item['value'] * 100)/100}</h1>
-          <p className=""> {item['unit']}</p>
+          <h1 className="mb-0">{Math.round(this.state.item['value'] * 100)/100}</h1>
+          <p className=""> {this.state.item['unit']}</p>
         </div>
-        <p className="text-left">{item['name']} - id: { item['id'] }</p>
+        <p className="text-left">{this.state.item['name']} - id: { this.state.item['id'] }</p>
       </div>
     )
   }
 }
-
 
 export default KitSensors;
