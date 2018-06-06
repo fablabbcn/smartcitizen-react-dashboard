@@ -11,7 +11,8 @@ class KitList extends Component{
         </div>
         {item.map((x,y) => {
           return(
-            <div key={y} className="col-4 col-md-3 col-xl-2 border">
+            <div key={y} className="col-4 col-md-6 col-lg-4 col-xl-2 border">
+              <button className="btn bg-black" onClick={() => this.props.handler(x['id'])} >{x['id']} </button>
               <p>{x['last_reading_at']}</p>
               <p>{x['city']} - {x['country_code']}</p>
               <p>{x['description']}</p>
