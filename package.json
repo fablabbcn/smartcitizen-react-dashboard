@@ -2,7 +2,7 @@
   "name": "smartcitizen-now",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://fablabbcn.github.io/smartcitizen-react/",
+  "homepage": "https://r.smartcitizen.me",
   "dependencies": {
     "gh-pages": "^1.2.0",
     "react": "^16.4.0",
