@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class KitList extends Component{
+class NearDevices extends Component{
 
   render(){
     let item = this.props.data;
@@ -38,4 +38,4 @@ class KitList extends Component{
 }
 
 
-export default KitList;
+export default NearDevices;

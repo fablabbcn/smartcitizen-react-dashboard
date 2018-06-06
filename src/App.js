@@ -3,7 +3,8 @@ import './App.css';
 import KitSensors from './KitSensors.js';
 import KitOwner from './KitOwner.js';
 import KitInfo from './KitInfo.js';
-import KitList from './KitList.js';
+import AllDevices from './AllDevices.js';
+import NearDevices from './NearDevices.js';
 
 import Plot from 'react-plotly.js';
 
@@ -16,8 +17,10 @@ class App extends Component {
       targetTag: '',
       isShowingKitInfo: false,
       isShowingDeviceList: true,
+      isShowingWorldMap: false,
       owner: [],
       theData: [],
+      world_map: [],
       theDevices: [],
       theKit: [],
       theReading: [],
@@ -30,8 +33,10 @@ class App extends Component {
     this.getGeoLocation = this.getGeoLocation.bind(this);
     this.getReading = this.getReading.bind(this);
     this.getSensorData = this.getSensorData.bind(this);
+    this.getWorldMap = this.getWorldMap.bind(this);
     this.toggleShowDevices = this.toggleShowDevices.bind(this);
     this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
+    this.toggleShowWorldmap = this.toggleShowWorldmap.bind(this);
 
     this.updateSelectedDevice = this.updateSelectedDevice.bind(this);
   }
@@ -107,7 +112,7 @@ class App extends Component {
           <div className="col-12 col-md-6">
 
             <button className="btn bg-blue mr-1" onClick={this.getGeoLocation}>Get nearby Devices</button>
-            <button className="btn bg-blue mr-1" onClick={this.getDevices}>Get ALL Devices</button>
+            <button className="btn bg-blue mr-1" onClick={this.getWorldMap}>Get ALL Devices</button>
             <button className="btn bg-grey mr-1" onClick={() => this.getDevicesByTag('Streamr')}>Streamr Tag</button>
             <button className="btn bg-grey mr-1" onClick={() => this.getDevicesByTag('Amsterdam')}>Amsterdam Tag</button>
             <div id="geo">(geolocation will appear here)</div>
@@ -117,13 +122,21 @@ class App extends Component {
                 <input type="text" onChange={this.changeTargetTag} value={this.state.targetTag}/>
                 <button className="btn bg-black my-1" onClick={this.getDevicesByTag}> Get tag </button>
                 <br />
-                <button className={"btn bg-black my-1 " + (this.state.isShowingDeviceList ? 'bg-grey' : 'bg-black' ) }
-                  onClick={this.toggleShowDevices} > {this.state.isShowingDeviceList ? 'Hide' : 'Show'} Devices ({this.state.theDevices.length} items)</button>
               </div>
             </div>
 
+            <button className={"btn bg-black m-1 " + (this.state.isShowingDeviceList ? 'bg-grey' : 'bg-black' ) }
+              onClick={this.toggleShowDevices} > {this.state.isShowingDeviceList ? 'Hide' : 'Show'} nearby Devices ({this.state.theDevices.length} items)</button>
+
             {this.state.isShowingDeviceList &&
-                <KitList data={this.state.theDevices} handler={this.updateSelectedDevice}/>
+                <NearDevices data={this.state.theDevices} handler={this.updateSelectedDevice} />
+            }
+
+            <button className={"btn bg-black m-1 " + (this.state.isShowingWorldMap ? 'bg-grey' : 'bg-black' ) }
+                  onClick={this.toggleShowWorldmap} > {this.state.isShowingWorldMap ? 'Hide' : 'Show'} World Map ({this.state.world_map.length} items)</button>
+
+            {this.state.isShowingWorldMap &&
+                <AllDevices data={this.state.world_map} handler={this.updateSelectedDevice} />
             }
 
           </div>
@@ -152,15 +165,21 @@ class App extends Component {
     })
   }
 
-  getDevices(myurl){
-    // If no myurl is given (is not a string), search the world_map
+  getWorldMap(){
     let theUrl = 'https://api.smartcitizen.me/v0/devices/world_map'
-    if (typeof myurl === 'string'){
-      theUrl = myurl;
-    }
+    return fetch(theUrl)
+      .then((response) =>  response.json())
+      .then((responseJson) => {
+        this.setState({
+          world_map: responseJson,
+        });
+      }).catch(err => {
+        console.log(err)
+      })
+  }
 
+  getDevices(theUrl){
     console.log('fetching: ', theUrl);
-
     return fetch(theUrl)
       .then((response) =>  response.json())
       .then((responseJson) => {
@@ -202,6 +221,7 @@ class App extends Component {
     var that = this;
 
     if (navigator.geolocation) {
+      console.log(1)
       navigator.geolocation.getCurrentPosition(function(position){
         x.innerHTML = "Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude;
         that.getDevicesNear(position.coords.latitude, position.coords.longitude)
@@ -220,8 +240,8 @@ class App extends Component {
     this.getDevices(url)
   }
   getDevicesNear(lat,lng){
+    console.log(123)
     let url = "https://api.smartcitizen.me/v0/devices?near=" + lat + "," + lng
-    // console.log(url)
     this.getDevices(url)
   }
 
@@ -249,6 +269,10 @@ class App extends Component {
 
   toggleShowKitInfo(){
     this.setState({isShowingKitInfo: !this.state.isShowingKitInfo})
+  }
+
+  toggleShowWorldmap(){
+    this.setState({isShowingWorldMap: !this.state.isShowingWorldMap})
   }
 
 }
