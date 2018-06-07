@@ -5,11 +5,12 @@ import KitOwner from './KitOwner.js';
 import KitInfo from './KitInfo.js';
 import NearDevices from './NearDevices.js';
 import SckGraph from './SckGraph.js';
+import Tags from './Tags.js';
 import WorldMap from './WorldMap.js';
 import WorldMapList from './WorldMapList.js';
 
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 
 class App extends Component {
   constructor(props){
@@ -47,110 +48,97 @@ class App extends Component {
   render() {
 
     const Kits = ({ match }) => (
-      <div>id {match.params.id}</div>
+      <div>We can load kits with /kits/{match.params.id}</div>
     )
 
     return (
 
       <div className="container-fluid">
         <Router>
-          <div className="row">
-            <div className="col-12">
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
+          <div className="row main">
+
+            <div className="col-md-12">
+              <ul className="list-inline">
+                <li className="list-inline-item">
+                  <NavLink activeClassName="nav-active" to="/graph">Graph</NavLink>
                 </li>
-                <li>
-                  <Link to="/graph">Graph</Link>
+                <li className="list-inline-item">
+                  <NavLink activeClassName="nav-active" to="/nearby">Nearby</NavLink>
                 </li>
-                <li>
-                  <Link to="/map">WorldMap</Link>
+                <li className="list-inline-item">
+                  <NavLink activeClassName="nav-active" to="/map">WorldMap</NavLink>
                 </li>
-                <li>
-                  <Link to="/maplist">WorldMapList</Link>
+                <li className="list-inline-item">
+                  <NavLink activeClassName="nav-active" to="/maplist">WorldMapList</NavLink>
                 </li>
-                <li>
-                  <Link to="/nearby">Nearby</Link>
+                <li className="list-inline-item">
+                  <NavLink activeClassName="nav-active" to="/tags">Tags</NavLink>
+                </li>
+                <li className="list-inline-item">
+                  <NavLink activeClassName="nav-active" to="/kits/4">/kits/4</NavLink>
+                </li>
+                <li className="list-inline-item">
+                  <NavLink activeClassName="nav-active" to="/kits/5">/kits/5</NavLink>
                 </li>
               </ul>
             </div>
 
-              <hr />
+            <div className="col-12 col-md-6 left-column">
 
-              <Route exact path="/"   render={() => <h3>Home</h3>}/>
-              <Route path="/kits/:id"    component={Kits} />
+              <div className="row">
+                <div className="col-12 col-md-10 mx-auto text-center">
+                  <input type="text" onChange={this.changeTargetId} value={this.state.targetId}/>
+                  <button className="btn bg-black my-1" onClick={this.getSensorData}> Get id </button>
+                  <br />
+                  <p className={ "border " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.targetId}</p>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-12 text-right">
+                  <button className={"btn my-1 " + (this.state.isShowingKitInfo? "bg-grey" : "bg-black")}
+                    onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info </button>
+                </div>
+              </div>
+
+              {this.state.isShowingKitInfo &&
+                  <div className="row border p-3">
+                    <div className="col-6">
+                      <KitInfo data={this.state.theKit} />
+                    </div>
+                    <div className="col-6">
+                      <KitOwner data={this.state.owner} />
+                    </div>
+                  </div>
+              }
+
+              <div className="row">
+                <div className="col-12">
+                  <h3 className="text-center">Kit {this.state.targetId} Sensors</h3>
+                  <p>Last recorded at: {this.state.theData['recorded_at']}</p>
+                </div>
+                {
+                  this.state.theSensors.map((item, key) => {
+                    return(
+                      <KitSensors data={item} key={key}/>
+                    )
+                  })
+                }
+              </div>
+
+            </div>
+
+            <div className="col-12 col-md-6 right-column">
+              <Route path="/kits/:id" component={Kits} />
               <Route path="/graph"    render={() => <SckGraph data={this.state.theReading} />}/>
               <Route path="/map"      render={() => <WorldMap />}/>
               <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.updateSelectedDevice} getAll={this.getWorldMap} /> } />
               <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.updateSelectedDevice} getAll={this.getGeoLocation} /> } />
-              <hr />
+              <Route path="/tags"     render={() => <Tags getDevicesByTag={this.getDevicesByTag} /> } />
+            </div>
           </div>
+
         </Router>
-
-
-
-        <div className="row">
-          <div className="col-12 col-md-6">
-            <div className="row">
-              <div className="col-12 col-md-10 mx-auto text-center">
-                <input type="text" onChange={this.changeTargetId} value={this.state.targetId}/>
-                <button className="btn bg-black my-1" onClick={this.getSensorData}> Get id </button>
-                <br />
-                <p className={ "border " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.targetId}</p>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-12 text-right">
-                <button className={"btn my-1 " + (this.state.isShowingKitInfo? "bg-grey" : "bg-black")}
-                  onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info </button>
-              </div>
-            </div>
-
-            {this.state.isShowingKitInfo &&
-                <div className="row border p-3">
-                  <div className="col-6">
-                    <KitInfo data={this.state.theKit} />
-                  </div>
-                  <div className="col-6">
-                    <KitOwner data={this.state.owner} />
-                  </div>
-                </div>
-            }
-
-            <div className="row">
-              <div className="col-12">
-                <h3 className="text-center">Kit {this.state.targetId} Sensors</h3>
-                <p className="text-right">Last recorded at: {this.state.theData['recorded_at']}</p>
-              </div>
-              {
-                this.state.theSensors.map((item, key) => {
-                  return(
-                    <KitSensors data={item} key={key}/>
-                  )
-                })
-              }
-            </div>
-
-          </div>
-
-          <div className="col-12 col-md-6">
-
-            <button className="btn bg-grey mr-1" onClick={() => this.getDevicesByTag('Streamr')}>Streamr Tag</button>
-            <button className="btn bg-grey mr-1" onClick={() => this.getDevicesByTag('Amsterdam')}>Amsterdam Tag</button>
-            <div id="geo">(geolocation will appear here)</div>
-
-            <div className="row">
-              <div className="col-12 text-right">
-                <input type="text" onChange={this.changeTargetTag} value={this.state.targetTag}/>
-                <button className="btn bg-black my-1" onClick={this.getDevicesByTag}> Get tag </button>
-                <br />
-              </div>
-            </div>
-
-
-          </div>
-        </div>
 
       </div>
     );
@@ -240,6 +228,7 @@ class App extends Component {
   }
 
   getDevicesByTag(tag){
+    console.log(tag)
     let url = '';
     if (typeof tag === 'string') {
       url = "https://api.smartcitizen.me/v0/devices?user_tags=" + tag;

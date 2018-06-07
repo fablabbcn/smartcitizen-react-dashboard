@@ -51,3 +51,7 @@ body{
   background-color: #FF3D4C;
   color: black;
 }
+
+.nav-active{
+  color: black;
+}
