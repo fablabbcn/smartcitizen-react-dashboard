@@ -3,10 +3,13 @@ import './App.css';
 import KitSensors from './KitSensors.js';
 import KitOwner from './KitOwner.js';
 import KitInfo from './KitInfo.js';
-import AllDevices from './AllDevices.js';
 import NearDevices from './NearDevices.js';
+import SckGraph from './SckGraph.js';
+import WorldMap from './WorldMap.js';
+import WorldMapList from './WorldMapList.js';
 
-import Plot from 'react-plotly.js';
+
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 class App extends Component {
   constructor(props){
@@ -43,26 +46,48 @@ class App extends Component {
 
   render() {
 
-    let xxx = [];
-    let yyy = [];
-
-    this.state.theReading.forEach(([x, y]) => {
-      xxx.push(x)
-      yyy.push(y)
-    })
+    const Kits = ({ match }) => (
+      <div>id {match.params.id}</div>
+    )
 
     return (
-      <div className="container-fluid">
 
-        <div className="row">
-          <div className="col-12 text-center">
-            <Plot
-              data={[ {type: 'bar', x: xxx, y: yyy}, ]}
-              layout={{width: 820, height: 440, title: 'A test Plot for device 1616'}}
-            />
-            <hr />
+      <div className="container-fluid">
+        <Router>
+          <div className="row">
+            <div className="col-12">
+              <ul>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/graph">Graph</Link>
+                </li>
+                <li>
+                  <Link to="/map">WorldMap</Link>
+                </li>
+                <li>
+                  <Link to="/maplist">WorldMapList</Link>
+                </li>
+                <li>
+                  <Link to="/nearby">Nearby</Link>
+                </li>
+              </ul>
+            </div>
+
+              <hr />
+
+              <Route exact path="/"   render={() => <h3>Home</h3>}/>
+              <Route path="/kits/:id"    component={Kits} />
+              <Route path="/graph"    render={() => <SckGraph data={this.state.theReading} />}/>
+              <Route path="/map"      render={() => <WorldMap />}/>
+              <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.updateSelectedDevice} getAll={this.getWorldMap} /> } />
+              <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.updateSelectedDevice} getAll={this.getGeoLocation} /> } />
+              <hr />
           </div>
-        </div>
+        </Router>
+
+
 
         <div className="row">
           <div className="col-12 col-md-6">
@@ -111,8 +136,6 @@ class App extends Component {
 
           <div className="col-12 col-md-6">
 
-            <button className="btn bg-blue mr-1" onClick={this.getGeoLocation}>Get nearby Devices</button>
-            <button className="btn bg-blue mr-1" onClick={this.getWorldMap}>Get ALL Devices</button>
             <button className="btn bg-grey mr-1" onClick={() => this.getDevicesByTag('Streamr')}>Streamr Tag</button>
             <button className="btn bg-grey mr-1" onClick={() => this.getDevicesByTag('Amsterdam')}>Amsterdam Tag</button>
             <div id="geo">(geolocation will appear here)</div>
@@ -125,19 +148,6 @@ class App extends Component {
               </div>
             </div>
 
-            <button className={"btn bg-black m-1 " + (this.state.isShowingDeviceList ? 'bg-grey' : 'bg-black' ) }
-              onClick={this.toggleShowDevices} > {this.state.isShowingDeviceList ? 'Hide' : 'Show'} nearby Devices ({this.state.theDevices.length} items)</button>
-
-            {this.state.isShowingDeviceList &&
-                <NearDevices data={this.state.theDevices} handler={this.updateSelectedDevice} />
-            }
-
-            <button className={"btn bg-black m-1 " + (this.state.isShowingWorldMap ? 'bg-grey' : 'bg-black' ) }
-                  onClick={this.toggleShowWorldmap} > {this.state.isShowingWorldMap ? 'Hide' : 'Show'} World Map ({this.state.world_map.length} items)</button>
-
-            {this.state.isShowingWorldMap &&
-                <AllDevices data={this.state.world_map} handler={this.updateSelectedDevice} />
-            }
 
           </div>
         </div>

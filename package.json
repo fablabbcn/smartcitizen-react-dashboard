@@ -8,7 +8,8 @@
     "plotly.js": "^1.38.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "react-plotly.js": "^2.2.0"
+    "react-plotly.js": "^2.2.0",
+    "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
     "react-scripts": "1.1.4"

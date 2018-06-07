@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 
-class NearDevices extends Component{
+class WorldMapList extends Component{
 
   render(){
     let item = this.props.data;
     return(
       <div className="row">
         <div className="col-12">
-          <button className="btn bg-black m-1" onClick={this.props.getAll}>Get nearby Devices</button>
+          <button className="btn bg-black m-1" onClick={this.props.getAll}>Get ALL Devices (slow)</button>
+
           <table className="table table-sm table-bordered table-hover table-striped">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Last Reading</th>
-                <th>Name</th>
+                <th>Lat / Lng</th>
+                <th></th>
+                <th>Country</th>
                 <th>Username</th>
-                <th>City</th>
-                <th>Sensors</th>
               </tr>
             </thead>
             <tbody>
@@ -24,11 +25,11 @@ class NearDevices extends Component{
                 return(
                   <tr key={y} className="tr" onClick={() => this.props.handler(x['id'])} >
                     <td><p>{x['id']} </p></td>
-                    <td><p>{x['last_reading_at']}</p></td>
-                    <td><p>{x['name']}</p></td>
-                    <td><p>{x['owner'] ? x['owner']['username'] : ''}</p></td>
-                    <td><p>{x['owner'] ? x['owner']['location']['city'] : ''}</p></td>
-                    <td><p>{x['data']['sensors'].length}</p></td>
+                    <td><p>{x['last_reading_at']} </p></td>
+                    <td><p>{x['latitude']} {x['longitude']} </p></td>
+                    <td> <a href={"/kits/" + x['id']}>x['id']</a> </td>
+                    <td><p>{x['country_code']} </p></td>
+                    <td><p>{x['owner_username']} </p></td>
                   </tr>
                 )
               })}
@@ -40,5 +41,4 @@ class NearDevices extends Component{
   }
 }
 
-
-export default NearDevices;
+export default WorldMapList;
