@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Empty from './Empty.js';
 import KitSensors from './KitSensors.js';
 import KitOwner from './KitOwner.js';
 import KitInfo from './KitInfo.js';
@@ -48,7 +49,11 @@ class App extends Component {
   render() {
 
     const Kits = ({ match }) => (
-      <div>We can load kits with /kits/{match.params.id}</div>
+      <div>
+        We can load kits with /kits/{match.params.id}
+        {console.log(match)}
+        <Empty data={match.params.id} />
+      </div>
     )
 
     return (
@@ -59,47 +64,24 @@ class App extends Component {
 
             <div className="col-md-12">
               <ul className="list-inline">
-                <li className="list-inline-item">
-                  <NavLink activeClassName="nav-active" to="/graph">Graph</NavLink>
-                </li>
-                <li className="list-inline-item">
-                  <NavLink activeClassName="nav-active" to="/nearby">Nearby</NavLink>
-                </li>
-                <li className="list-inline-item">
-                  <NavLink activeClassName="nav-active" to="/map">WorldMap</NavLink>
-                </li>
-                <li className="list-inline-item">
-                  <NavLink activeClassName="nav-active" to="/maplist">WorldMapList</NavLink>
-                </li>
-                <li className="list-inline-item">
-                  <NavLink activeClassName="nav-active" to="/tags">Tags</NavLink>
-                </li>
-                <li className="list-inline-item">
-                  <NavLink activeClassName="nav-active" to="/kits/4">/kits/4</NavLink>
-                </li>
-                <li className="list-inline-item">
-                  <NavLink activeClassName="nav-active" to="/kits/5">/kits/5</NavLink>
-                </li>
+                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/graph">Graph</NavLink> </li>
+                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/nearby">Nearby</NavLink> </li>
+                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/map">WorldMap</NavLink> </li>
+                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/maplist">WorldMapList</NavLink> </li>
+                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/tags">Tags</NavLink> </li>
+                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/kits/4">/kits/4</NavLink> </li>
+                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/kits/5">/kits/5</NavLink> </li>
               </ul>
             </div>
 
             <div className="col-12 col-md-6 left-column">
 
-              <div className="row">
-                <div className="col-12 col-md-10 mx-auto text-center">
-                  <input type="text" onChange={this.changeTargetId} value={this.state.targetId}/>
-                  <button className="btn bg-black my-1" onClick={this.getSensorData}> Get id </button>
-                  <br />
-                  <p className={ "border " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.targetId}</p>
-                </div>
-              </div>
+              <input type="text" onChange={this.changeTargetId} value={this.state.targetId}/>
+              <button className="btn bg-black my-1" onClick={this.getSensorData}> Get id </button>
+              <br />
 
-              <div className="row">
-                <div className="col-12 text-right">
-                  <button className={"btn my-1 " + (this.state.isShowingKitInfo? "bg-grey" : "bg-black")}
-                    onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info </button>
-                </div>
-              </div>
+              <button className={"btn my-1 " + (this.state.isShowingKitInfo? "bg-grey" : "bg-black")}
+                onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info </button>
 
               {this.state.isShowingKitInfo &&
                   <div className="row border p-3">
@@ -114,6 +96,7 @@ class App extends Component {
 
               <div className="row">
                 <div className="col-12">
+                  <p className={"text-center " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.targetId}</p>
                   <h3 className="text-center">Kit {this.state.targetId} Sensors</h3>
                   <p>Last recorded at: {this.state.theData['recorded_at']}</p>
                 </div>
