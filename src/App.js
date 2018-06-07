@@ -240,7 +240,7 @@ class App extends Component {
     this.getDevices(url)
   }
   getDevicesNear(lat,lng){
-    console.log(123)
+    //console.log('lat:', lat, lng)
     let url = "https://api.smartcitizen.me/v0/devices?near=" + lat + "," + lng
     this.getDevices(url)
   }
