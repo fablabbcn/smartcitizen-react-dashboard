@@ -17,21 +17,24 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
+      favoriteDevices: [],
       hasData: false,
-      targetId: 2440,
-      targetTag: '',
       isShowingKitInfo: false,
       isShowingDeviceList: true,
       isShowingWorldMap: false,
       owner: [],
+      targetId: 2440,
+      targetTag: '',
       theData: [],
-      world_map: [],
       theDevices: [],
       theKit: [],
       theReading: [],
-      theSensors: []
+      theSensors: [],
+      world_map: []
     };
+    this.addFavoriteDevice = this.addFavoriteDevice.bind(this);
     this.changeTargetId = this.changeTargetId.bind(this);
+    this.changeTargetIdInput = this.changeTargetIdInput.bind(this);
     this.changeTargetTag = this.changeTargetTag.bind(this);
     this.getDevices = this.getDevices.bind(this);
     this.getDevicesByTag = this.getDevicesByTag.bind(this);
@@ -39,11 +42,13 @@ class App extends Component {
     this.getReading = this.getReading.bind(this);
     this.getSensorData = this.getSensorData.bind(this);
     this.getWorldMap = this.getWorldMap.bind(this);
+    this.isFavoriteDevice = this.isFavoriteDevice.bind(this);
+    this.removeFavoriteDevice = this.removeFavoriteDevice.bind(this);
+    this.toggleFavoriteDevice = this.toggleFavoriteDevice.bind(this);
     this.toggleShowDevices = this.toggleShowDevices.bind(this);
     this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
     this.toggleShowWorldmap = this.toggleShowWorldmap.bind(this);
 
-    this.updateSelectedDevice = this.updateSelectedDevice.bind(this);
   }
 
   render() {
@@ -76,15 +81,12 @@ class App extends Component {
 
             <div className="col-12 col-md-6 left-column">
 
-              <input type="text" onChange={this.changeTargetId} value={this.state.targetId}/>
-              <button className="btn bg-black my-1" onClick={this.getSensorData}> Get id </button>
-              <br />
 
               <button className={"btn my-1 " + (this.state.isShowingKitInfo? "bg-grey" : "bg-black")}
                 onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info </button>
 
               {this.state.isShowingKitInfo &&
-                  <div className="row border p-3">
+                  <div className="row py-3 my-2 bg-blue_light">
                     <div className="col-6">
                       <KitInfo data={this.state.theKit} />
                     </div>
@@ -96,8 +98,25 @@ class App extends Component {
 
               <div className="row">
                 <div className="col-12">
+                  <h3 className="text-center">Kit
+                    <input className="w-25 text-center mx-1" type="text" onChange={this.changeTargetIdInput} value={this.state.targetId}/>
+                    Sensors
+                  </h3>
+
+                  <div>
+                    <button className={"btn my-1 " + (this.isFavoriteDevice(this.state.targetId) ? "bg-grey" : "bg-black")}
+                      onClick={() => this.toggleFavoriteDevice(this.state.targetId)} > {this.isFavoriteDevice(this.state.targetId) ? 'Remove' : 'Add'} favorite device </button>
+
+                    {
+                      this.state.favoriteDevices.map((item, key) => {
+                        return(
+                          <button className="btn btn-sm bg-yellow m-2" onClick={() => this.changeTargetId(item)}  key={key}>{item}</button>
+                        )
+                      })
+                    }
+                  </div>
+
                   <p className={"text-center " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.targetId}</p>
-                  <h3 className="text-center">Kit {this.state.targetId} Sensors</h3>
                   <p>Last recorded at: {this.state.theData['recorded_at']}</p>
                 </div>
                 {
@@ -115,8 +134,8 @@ class App extends Component {
               <Route path="/kits/:id" component={Kits} />
               <Route path="/graph"    render={() => <SckGraph data={this.state.theReading} />}/>
               <Route path="/map"      render={() => <WorldMap />}/>
-              <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.updateSelectedDevice} getAll={this.getWorldMap} /> } />
-              <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.updateSelectedDevice} getAll={this.getGeoLocation} /> } />
+              <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeTargetId} getAll={this.getWorldMap} /> } />
+              <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.changeTargetId} getAll={this.getGeoLocation} /> } />
               <Route path="/tags"     render={() => <Tags getDevicesByTag={this.getDevicesByTag} /> } />
             </div>
           </div>
@@ -134,7 +153,46 @@ class App extends Component {
     //this.getGeoLocation();
   }
 
-  changeTargetId(event){
+  addFavoriteDevice(deviceId){
+    this.setState(prevState => ({
+      favoriteDevices: [ ...prevState.favoriteDevices, parseInt(deviceId, 10) ]
+    }));
+  }
+
+  toggleFavoriteDevice(deviceId){
+    if(this.isFavoriteDevice(deviceId)){
+      this.removeFavoriteDevice(deviceId);
+    }else{
+      this.addFavoriteDevice(deviceId);
+    }
+  }
+
+  isFavoriteDevice(deviceId){
+    console.log('check fav')
+    if (this.state.favoriteDevices.indexOf(deviceId) > -1) {
+      console.log('yes')
+      return true;
+    }
+    return false;
+  }
+  removeFavoriteDevice(deviceId){
+    let newArr = this.state.favoriteDevices;
+    let index = newArr.indexOf(deviceId);
+
+    if (index > -1) {
+      newArr.splice(index, 1);
+      this.setState({ favoriteDevices: newArr });
+    }
+  }
+
+  changeTargetId(id){
+    console.log('click', id);
+    this.setState({targetId: id}, () => {
+      this.getSensorData();
+    });
+  }
+
+  changeTargetIdInput(event){
     this.setState({targetId: event.target.value}, () => {
       this.getSensorData()
     })
@@ -236,13 +294,6 @@ class App extends Component {
           theReading: responseJson.readings
         })
       })
-  }
-
-  updateSelectedDevice(id){
-    console.log('click', id);
-    this.setState({targetId: id}, () => {
-      this.getSensorData();
-    });
   }
 
   toggleShowDevices(){
