@@ -10,7 +10,7 @@ class App extends Component {
     super(props);
     this.state = {
       hasData: false,
-      targetId: 2440,
+      targetId: 4300,
       isShowingKitInfo: false,
       isShowingDeviceList: true,
       owner: [],
@@ -27,6 +27,18 @@ class App extends Component {
     this.getGeoLocation = this.getGeoLocation.bind(this);
 
     this.updateSelectedDevice = this.updateSelectedDevice.bind(this);
+  }
+
+  componentDidMount() {
+    this.getSensorData();
+    this.pingData = setInterval(
+      () => this.updateSelectedDevice(),
+      20000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.pingData);
   }
 
   render() {
@@ -101,12 +113,6 @@ class App extends Component {
     );
   }
 
-
-  componentDidMount(){
-    this.getSensorData();
-    //this.getGeoLocation();
-  }
-
   changeTargetId(event){
     this.setState({targetId: event.target.value}, () => {
       this.getSensorData()
@@ -176,8 +182,7 @@ class App extends Component {
     this.getDevices(url)
   }
 
-  updateSelectedDevice(id){
-    console.log('click', id);
+  updateSelectedDevice(id=this.state.targetId){
     this.setState({targetId: id}, () => {
       this.getSensorData();
     });
