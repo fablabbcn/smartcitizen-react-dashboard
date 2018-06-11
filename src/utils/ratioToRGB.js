@@ -8,8 +8,8 @@ function roundArray(r, g, b) {
 
 export function ratioToRGB(ratio) {
     const hue = (120 * ratio) / 360;  // limited from red to green
-    const saturation = 0.5;           // try some
-    const value = 1;                 // try some
+    const saturation = 0.8;           // try some
+    const value = 0.8;                 // try some
     const i = Math.floor(hue * 6);
     const f = hue * 6 - i;
     const p = value * (1 - saturation);
