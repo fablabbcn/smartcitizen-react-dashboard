@@ -4,6 +4,7 @@ import KitSensors from './KitSensors.js';
 import KitOwner from './KitOwner.js';
 import KitInfo from './KitInfo.js';
 import KitList from './KitList.js';
+import Sensor from './models/sensor';
 
 class App extends Component {
   constructor(props){
@@ -79,9 +80,9 @@ class App extends Component {
                 <p className="text-right">Last recorded at: {this.state.theData['recorded_at']}</p>
               </div>
               {
-                this.state.theSensors.map((item, key) => {
+                this.state.theSensors.map((sensor, index) => {
                   return(
-                    <KitSensors data={item} key={key}/>
+                    <KitSensors sensor={sensor} key={index}/>
                   )
                 })
               }
@@ -148,7 +149,7 @@ class App extends Component {
           hasData: true,
           owner: responseJson.owner,
           theData: responseJson.data,
-          theSensors: responseJson.data.sensors,
+          theSensors: responseJson.data.sensors.map((sensorData) => new Sensor(sensorData)),
           theKit: responseJson.kit,
         });
       }).catch(err => {
