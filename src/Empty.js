@@ -7,8 +7,7 @@ class Empty extends Component{
     return(
       <div className="row">
         <div className="col-12">
-          {console.log(this)}
-          {this.props.data}
+          Empty
         </div>
       </div>
     )

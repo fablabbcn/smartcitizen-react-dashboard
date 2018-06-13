@@ -18,7 +18,7 @@ class KitSensors extends Component{
   render(){
     let item = this.props.data;
     return(
-      <div className={"p-3 col-6 col-xl-4 d-flex justify-content-between flex-column  " + this.getClass(item['id']) }  >
+      <div className={"p-3 col-6 col-xl-4 d-flex justify-content-between flex-column  " + this.getClass(item['id']) } onClick={() => this.props.sendToChart(item['id'])} >
         <p>{item['description']}</p>
         <div className="text-center my-3">
           <h1 className="mb-0">{Math.round(item['value'] * 100)/100}</h1>

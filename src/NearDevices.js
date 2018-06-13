@@ -9,7 +9,7 @@ class NearDevices extends Component{
         <div className="col-12">
           <div id="geo">(geolocation will appear here)</div>
           <button className="btn bg-black m-1" onClick={this.props.getAll}>Get nearby Devices</button>
-          <table className="table table-sm table-bordered table-hover table-striped">
+          <table className="table table-sm table-bordered table-hover table-striped table-responsive">
             <thead>
               <tr>
                 <th>ID</th>

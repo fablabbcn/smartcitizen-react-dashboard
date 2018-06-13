@@ -17,7 +17,7 @@ class SckGraph extends Component{
     return(
       <Plot
         data={[ {type: 'bar', x: xxx, y: yyy}, ]}
-        layout={{width: 820, height: 440, title: 'A test Plot for device 1616'}}
+        layout={{width: 820, height: 440, title: 'React - Plotly'}}
       />
     )
   }

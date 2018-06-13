@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import Empty from './Empty.js';
 import KitSensors from './KitSensors.js';
 import KitOwner from './KitOwner.js';
 import KitInfo from './KitInfo.js';
@@ -23,7 +22,7 @@ class App extends Component {
       isShowingDeviceList: true,
       isShowingWorldMap: false,
       owner: [],
-      targetId: 2440,
+      selectedDevice: 2440,
       targetTag: '',
       theData: [],
       theDevices: [],
@@ -44,6 +43,7 @@ class App extends Component {
     this.getWorldMap = this.getWorldMap.bind(this);
     this.isFavoriteDevice = this.isFavoriteDevice.bind(this);
     this.removeFavoriteDevice = this.removeFavoriteDevice.bind(this);
+    this.sendToChart = this.sendToChart.bind(this);
     this.toggleFavoriteDevice = this.toggleFavoriteDevice.bind(this);
     this.toggleShowDevices = this.toggleShowDevices.bind(this);
     this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
@@ -53,14 +53,6 @@ class App extends Component {
 
   render() {
 
-    const Kits = ({ match }) => (
-      <div>
-        We can load kits with /kits/{match.params.id}
-        {console.log(match)}
-        <Empty data={match.params.id} />
-      </div>
-    )
-
     return (
 
       <div className="container-fluid">
@@ -69,18 +61,22 @@ class App extends Component {
 
             <div className="col-md-12">
               <ul className="list-inline">
-                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/graph">Graph</NavLink> </li>
                 <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/nearby">Nearby</NavLink> </li>
                 <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/map">WorldMap</NavLink> </li>
                 <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/maplist">WorldMapList</NavLink> </li>
                 <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/tags">Tags</NavLink> </li>
-                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/kits/4">/kits/4</NavLink> </li>
-                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/kits/5">/kits/5</NavLink> </li>
               </ul>
             </div>
 
-            <div className="col-12 col-md-6 left-column">
+            <div className="col-12 col-md-6 col-xl-4">
+              <Route path="/" exact   render={() => <NearDevices data={this.state.theDevices} handler={this.changeTargetId} getAll={this.getGeoLocation} /> } />
+              <Route path="/map"      render={() => <WorldMap />}/>
+              <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeTargetId} getAll={this.getWorldMap} /> } />
+              <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.changeTargetId} getAll={this.getGeoLocation} /> } />
+              <Route path="/tags"     render={() => <Tags getDevicesByTag={this.getDevicesByTag} /> } />
+            </div>
 
+            <div className="col-12 col-md-6 col-xl-4">
 
               <button className={"btn my-1 " + (this.state.isShowingKitInfo? "bg-grey" : "bg-black")}
                 onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info </button>
@@ -99,13 +95,13 @@ class App extends Component {
               <div className="row">
                 <div className="col-12">
                   <h3 className="text-center">Kit
-                    <input className="w-25 text-center mx-1" type="text" onChange={this.changeTargetIdInput} value={this.state.targetId}/>
+                    <input className="w-25 text-center mx-1" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
                     Sensors
                   </h3>
 
-                  <div>
-                    <button className={"btn my-1 " + (this.isFavoriteDevice(this.state.targetId) ? "bg-grey" : "bg-black")}
-                      onClick={() => this.toggleFavoriteDevice(this.state.targetId)} > {this.isFavoriteDevice(this.state.targetId) ? 'Remove' : 'Add'} favorite device </button>
+                  <div className="favorite-devices">
+                    <button className={"btn my-1 " + (this.isFavoriteDevice(this.state.selectedDevice) ? "bg-grey" : "bg-black")}
+                      onClick={() => this.toggleFavoriteDevice(this.state.selectedDevice)} > {this.isFavoriteDevice(this.state.selectedDevice) ? 'Remove' : 'Add'} favorite device </button>
 
                     {
                       this.state.favoriteDevices.map((item, key) => {
@@ -116,32 +112,26 @@ class App extends Component {
                     }
                   </div>
 
-                  <p className={"text-center " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.targetId}</p>
+                  <p className={"text-center " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.selectedDevice}</p>
                   <p>Last recorded at: {this.state.theData['recorded_at']}</p>
                 </div>
                 {
                   this.state.theSensors.map((item, key) => {
                     return(
-                      <KitSensors data={item} key={key}/>
+                      <KitSensors data={item} key={key} sendToChart={this.sendToChart}/>
                     )
                   })
                 }
               </div>
-
             </div>
 
-            <div className="col-12 col-md-6 right-column">
-              <Route path="/kits/:id" component={Kits} />
-              <Route path="/graph"    render={() => <SckGraph data={this.state.theReading} />}/>
-              <Route path="/map"      render={() => <WorldMap />}/>
-              <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeTargetId} getAll={this.getWorldMap} /> } />
-              <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.changeTargetId} getAll={this.getGeoLocation} /> } />
-              <Route path="/tags"     render={() => <Tags getDevicesByTag={this.getDevicesByTag} /> } />
+            <div className="col-12 col-md-6 col-xl-4">
+              <SckGraph data={this.state.theReading} />
             </div>
+
+            {/* end row */}
           </div>
-
         </Router>
-
       </div>
     );
   }
@@ -187,13 +177,13 @@ class App extends Component {
 
   changeTargetId(id){
     console.log('click', id);
-    this.setState({targetId: id}, () => {
+    this.setState({selectedDevice: id}, () => {
       this.getSensorData();
     });
   }
 
   changeTargetIdInput(event){
-    this.setState({targetId: event.target.value}, () => {
+    this.setState({selectedDevice: event.target.value}, () => {
       this.getSensorData()
     })
   }
@@ -232,7 +222,7 @@ class App extends Component {
 
   getSensorData(e){
     //console.log('fetching data...');
-    return fetch('https://api.smartcitizen.me/v0/devices/' + this.state.targetId)
+    return fetch('https://api.smartcitizen.me/v0/devices/' + this.state.selectedDevice)
       .then((response) =>  response.json())
       .then((responseJson) => {
         this.setState({
@@ -285,8 +275,19 @@ class App extends Component {
     this.getDevices(url)
   }
 
-  getReading(){
-    let url = " https://api.smartcitizen.me/v0/devices/1616/readings?sensor_id=7&rollup=4h&from=2015-07-28&to=2015-08-30";
+  getReading(deviceid, sensorid){
+
+    let devid = 1616; //Default testing
+    let sensid = 7; //Default test
+    if(deviceid){
+      console.log(deviceid)
+      devid = deviceid
+    }
+    if(sensorid){
+      sensid = sensorid;
+    }
+    let url = "https://api.smartcitizen.me/v0/devices/" + devid +
+      "/readings?sensor_id=" + sensid + "&rollup=4h&from=2015-07-28&to=2015-08-30";
     return fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -295,7 +296,11 @@ class App extends Component {
         })
       })
   }
-
+  sendToChart(sensorid){
+    // Do we need to send deviceid?  It lives with the parent state, selectedDevice
+    console.log('sendToChart ', sensorid)
+    this.getReading(this.state.selectedDevice, sensorid);
+  }
   toggleShowDevices(){
     this.setState({isShowingDeviceList: !this.state.isShowingDeviceList})
   }
