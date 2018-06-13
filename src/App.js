@@ -158,7 +158,6 @@ class App extends Component {
   }
 
   isFavoriteDevice(deviceId){
-    console.log('check fav')
     if (this.state.favoriteDevices.indexOf(deviceId) > -1) {
       console.log('yes')
       return true;
@@ -286,8 +285,18 @@ class App extends Component {
     if(sensorid){
       sensid = sensorid;
     }
+
+    let today = new Date();
+    let yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1) //Epoch
+
+    let from_date = new Date(yesterday).toISOString().slice(0,10);
+    let to_date = new Date().toISOString().slice(0,10);
+
+
     let url = "https://api.smartcitizen.me/v0/devices/" + devid +
-      "/readings?sensor_id=" + sensid + "&rollup=4h&from=2015-07-28&to=2015-08-30";
+      "/readings?sensor_id=" + sensid + "&rollup=4h&from=" + from_date +
+      "&to=" + to_date;
     return fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
