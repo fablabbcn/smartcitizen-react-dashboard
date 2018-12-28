@@ -86,9 +86,7 @@ class App extends Component {
             {(this.state.isShowingWorldMap || this.state.isShowingFavorites) &&
               <div className="col-12 col-md-6 col-xl-3 sck-router ">
                 {this.state.isShowingFavorites &&
-
                   <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
-
                 }
 
                 {this.state.isShowingWorldMap &&
@@ -101,10 +99,10 @@ class App extends Component {
                     </ul>
 
                     <p>(React Router - This is a work in progress!)</p>
-                    <Route path="/" exact   render={() => <NearDevices data={this.state.theDevices} handler={this.changeSelectedDevice} getAll={this.getGeoLocation} /> } />
+                    <Route path="/" exact   render={() => <NearDevices data={this.state.theDevices} getAll={this.getGeoLocation} /> } />
                     <Route path="/map"      render={() => <WorldMap />}/>
                     <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeSelectedDevice} getAll={this.getWorldMap} /> } />
-                    <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.changeSelectedDevice} getAll={this.getGeoLocation} /> } />
+                    <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} getAll={this.getGeoLocation} /> } />
                     <Route path="/tags"     render={() => <Tags data={this.state.theDevices} getDevicesByTag={this.getDevicesByTag} /> } />
                   </div>
                 }
@@ -173,17 +171,9 @@ class App extends Component {
     }));
   }
 
-  toggleFavoriteDevice(deviceId){
-    if(this.isFavoriteDevice(deviceId)){
-      this.removeFavoriteDevice(deviceId);
-    }else{
-      this.addFavoriteDevice(deviceId);
-    }
-  }
-
   isFavoriteDevice(deviceId){
     if (this.state.favoriteDevices.indexOf(deviceId) > -1) {
-      console.log('yes')
+      //console.log('Device is favorite', deviceId)
       return true;
     }
     return false;
@@ -199,7 +189,7 @@ class App extends Component {
   }
 
   changeSelectedDevice(id){
-    console.log('click', id);
+    //console.log('changeSelectedDevice', id);
     this.setState({selectedDevice: id}, () => {
       this.getSensorData();
     });
@@ -213,7 +203,7 @@ class App extends Component {
 
   changeTargetTag(event){
     this.setState({targetTag: event.target.value}, () => {
-      ////console.log(this.state.targetTag)
+      //console.log(this.state.targetTag)
     })
   }
 
@@ -231,7 +221,7 @@ class App extends Component {
   }
 
   getDevices(theUrl){
-    console.log('fetching: ', theUrl);
+    console.log('getDevices: ', theUrl);
     return fetch(theUrl)
       .then((response) =>  response.json())
       .then((responseJson) => {
@@ -244,7 +234,7 @@ class App extends Component {
   }
 
   getSensorData(e){
-    //console.log('fetching data...');
+    console.log('getSensorData for selectedDevice...');
     return fetch('https://api.smartcitizen.me/v0/devices/' + this.state.selectedDevice)
       .then((response) =>  response.json())
       .then((responseJson) => {
@@ -273,7 +263,7 @@ class App extends Component {
     var that = this;
 
     if (navigator.geolocation) {
-      console.log(1)
+      //console.log('Navigator works')
       navigator.geolocation.getCurrentPosition(function(position){
         x.innerHTML = "Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude;
         that.getDevicesNear(position.coords.latitude, position.coords.longitude)
@@ -282,7 +272,7 @@ class App extends Component {
   }
 
   getDevicesByTag(tag){
-    console.log(tag)
+    console.log('getDevicesByTag: ', tag)
     let url = '';
     if (typeof tag === 'string') {
       url = "https://api.smartcitizen.me/v0/devices?user_tags=" + tag;
@@ -303,7 +293,7 @@ class App extends Component {
     let devid = 1616; //Default testing
     let sensid = 7; //Default test
     if(deviceid){
-      console.log(deviceid)
+      console.log('getReading for:', deviceid)
       devid = deviceid
     }
     if(sensorid){
@@ -317,7 +307,6 @@ class App extends Component {
     let from_date = new Date(yesterday).toISOString().slice(0,10);
     let to_date = new Date().toISOString().slice(0,10);
 
-
     let url = "https://api.smartcitizen.me/v0/devices/" + devid +
       "/readings?sensor_id=" + sensid + "&rollup=4h&from=" + from_date +
       "&to=" + to_date;
@@ -329,11 +318,20 @@ class App extends Component {
         })
       })
   }
+
   sendToChart(sensorid){
-    // Do we need to send deviceid?  It lives with the parent state, selectedDevice
     console.log('sendToChart ', sensorid)
     this.getReading(this.state.selectedDevice, sensorid);
   }
+
+  toggleFavoriteDevice(deviceId){
+    if(this.isFavoriteDevice(deviceId)){
+      this.removeFavoriteDevice(deviceId);
+    }else{
+      this.addFavoriteDevice(deviceId);
+    }
+  }
+
   toggleShowDevices(){
     this.setState({isShowingDeviceList: !this.state.isShowingDeviceList})
   }
@@ -344,22 +342,18 @@ class App extends Component {
 
   toggleShowWorldmap(){
     this.setState({isShowingWorldMap: !this.state.isShowingWorldMap})
-    console.log('show worldmap', this.state.isShowingWorldMap)
   }
 
   toggleShowFavorites(){
     this.setState({isShowingFavorites: !this.state.isShowingFavorites})
-    console.log('show fav', this.state.isShowingFavorites)
   }
 
   toggleShowGraph(){
     this.setState({isShowingGraph: !this.state.isShowingGraph})
-    console.log('show Graph', this.state.isShowingGraph)
   }
 
   toggleShowLive(){
     this.setState({isShowingLive: !this.state.isShowingLive})
-    console.log('show live', this.state.isShowingLive)
   }
 
 }

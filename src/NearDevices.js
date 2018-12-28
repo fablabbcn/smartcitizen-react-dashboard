@@ -4,7 +4,6 @@ import DeviceResults from './DeviceResults';
 class NearDevices extends Component{
 
   render(){
-    let item = this.props.data;
     return(
       <div className="row">
         <div className="col-12">
