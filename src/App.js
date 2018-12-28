@@ -275,9 +275,9 @@ class App extends Component {
     console.log('getDevicesByTag: ', tag)
     let url = '';
     if (typeof tag === 'string') {
-      url = "https://api.smartcitizen.me/v0/devices?user_tags=" + tag;
+      url = "https://api.smartcitizen.me/v0/devices?with_tags=" + tag;
     }else{
-      url = "https://api.smartcitizen.me/v0/devices?user_tags=" + this.state.targetTag;
+      url = "https://api.smartcitizen.me/v0/devices?with_tags=" + this.state.targetTag;
     }
     //console.log(url)
     this.getDevices(url)
