@@ -15,7 +15,6 @@ class WorldMapList extends Component{
                 <th>ID</th>
                 <th>Last Reading</th>
                 <th>Lat / Lng</th>
-                <th></th>
                 <th>Country</th>
                 <th>Username</th>
               </tr>
@@ -27,7 +26,6 @@ class WorldMapList extends Component{
                     <td><p>{x['id']} </p></td>
                     <td><p>{x['last_reading_at']} </p></td>
                     <td><p>{x['latitude']} {x['longitude']} </p></td>
-                    <td> <a href={"/kits/" + x['id']}>x['id']</a> </td>
                     <td><p>{x['country_code']} </p></td>
                     <td><p>{x['owner_username']} </p></td>
                   </tr>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import DeviceResults from './DeviceResults';
 
 class Tags extends Component{
 
@@ -10,6 +11,8 @@ class Tags extends Component{
           <h3>Tags</h3>
           <button className="btn bg-grey mr-1" onClick={() => this.props.getDevicesByTag('Streamr')}>Streamr Tag</button>
           <button className="btn bg-grey mr-1" onClick={() => this.props.getDevicesByTag('Amsterdam')}>Amsterdam Tag</button>
+
+          <DeviceResults data={this.props.data} changeSelectedDevice={this.props.changeSelectedDevice}/>
         </div>
       </div>
     )

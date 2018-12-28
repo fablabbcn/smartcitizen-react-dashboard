@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import FavoriteDevices from './FavoriteDevices.js';
 import KitSensors from './KitSensors.js';
 import KitOwner from './KitOwner.js';
 import KitInfo from './KitInfo.js';
@@ -8,7 +9,7 @@ import SckGraph from './SckGraph.js';
 import Tags from './Tags.js';
 import WorldMap from './WorldMap.js';
 import WorldMapList from './WorldMapList.js';
-import { FaGlobeAfrica, FaGripVertical, FaMap, FaRegStar, FaStar, FaChartLine } from 'react-icons/fa';
+import { FaGlobeAfrica, FaGripVertical, FaRegStar, FaGlobe, FaList, FaStar,FaSearchLocation, FaTags, FaChartLine } from 'react-icons/fa';
 
 
 
@@ -21,11 +22,11 @@ class App extends Component {
       favoriteDevices: [],
       hasData: false,
       isShowingDeviceList: true,
-      isShowingFavorites: false,
+      isShowingFavorites: true,
       isShowingGraph: true,
       isShowingKitInfo: false,
       isShowingLive: true,
-      isShowingWorldMap: false,
+      isShowingWorldMap: true,
       owner: [],
       selectedDevice: 2440,
       targetTag: '',
@@ -37,7 +38,7 @@ class App extends Component {
       world_map: []
     };
     this.addFavoriteDevice = this.addFavoriteDevice.bind(this);
-    this.changeTargetId = this.changeTargetId.bind(this);
+    this.changeSelectedDevice = this.changeSelectedDevice.bind(this);
     this.changeTargetIdInput = this.changeTargetIdInput.bind(this);
     this.changeTargetTag = this.changeTargetTag.bind(this);
     this.getDevices = this.getDevices.bind(this);
@@ -68,16 +69,16 @@ class App extends Component {
           <div className="row main">
             <div className="col-md-12 sck-navbar">
               <ul className="list-inline">
-                <li className={"list-inline-item " + (this.state.isShowingFavorites ? "bg-dark" : "bg-light")}>
+                <li className={"list-inline-item " + (this.state.isShowingFavorites ? "bg-secondary" : "bg-light")}>
                   <h3 onClick={this.toggleShowFavorites} className="m-2"> <FaStar /> </h3>
                 </li>
-                <li className={"list-inline-item " + (this.state.isShowingWorldMap ? "bg-dark" : "bg-light")}>
+                <li className={"list-inline-item " + (this.state.isShowingWorldMap ? "bg-secondary" : "bg-light")}>
                   <h3 onClick={this.toggleShowWorldmap} className="m-2"> <FaGlobeAfrica /> </h3>
                 </li>
-                <li className={"list-inline-item " + (this.state.isShowingLive ? "bg-dark" : "bg-light")}>
+                <li className={"list-inline-item " + (this.state.isShowingLive ? "bg-secondary" : "bg-light")}>
                   <h3 onClick={this.toggleShowLive} className="m-2"> <FaGripVertical /> </h3>
                 </li>
-                <li className={"list-inline-item " + (this.state.isShowingGraph ? "bg-dark" : "bg-light")}>
+                <li className={"list-inline-item " + (this.state.isShowingGraph ? "bg-secondary" : "bg-light")}>
                   <h3 onClick={this.toggleShowGraph} className="m-2"> <FaChartLine /> </h3>
                 </li>
               </ul>
@@ -86,33 +87,26 @@ class App extends Component {
             {(this.state.isShowingWorldMap || this.state.isShowingFavorites) &&
               <div className="col-12 col-md-6 col-xl-3 sck-router ">
                 {this.state.isShowingFavorites &&
-                  <div className="favorite-devices p-2">
-                    <h3>Favorite Devices: </h3>
-                    {
-                      this.state.favoriteDevices.map((item, key) => {
-                        return(
-                            <button className="btn btn-sm bg-yellow m-2" onClick={() => this.changeTargetId(item)}  key={key}>{item}</button>
-                            )
-                      })
-                    }
-                  </div>
+
+                  <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
+
                 }
 
                 {this.state.isShowingWorldMap &&
                   <div className="border p-2">
                     <ul className="list-inline">
-                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/nearby">Nearby</NavLink> </li>
-                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/map">WorldMap</NavLink> </li>
-                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/maplist">WorldMapList</NavLink> </li>
-                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/tags">Tags</NavLink> </li>
+                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/nearby"><FaSearchLocation /> Nearby</NavLink> </li>
+                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/map"><FaGlobe /> WorldMap</NavLink> </li>
+                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/maplist"><FaList /> WorldMapList</NavLink> </li>
+                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/tags"><FaTags /> Tags</NavLink> </li>
                     </ul>
 
                     <p>(React Router - This is a work in progress!)</p>
-                    <Route path="/" exact   render={() => <NearDevices data={this.state.theDevices} handler={this.changeTargetId} getAll={this.getGeoLocation} /> } />
+                    <Route path="/" exact   render={() => <NearDevices data={this.state.theDevices} handler={this.changeSelectedDevice} getAll={this.getGeoLocation} /> } />
                     <Route path="/map"      render={() => <WorldMap />}/>
-                    <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeTargetId} getAll={this.getWorldMap} /> } />
-                    <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.changeTargetId} getAll={this.getGeoLocation} /> } />
-                    <Route path="/tags"     render={() => <Tags getDevicesByTag={this.getDevicesByTag} /> } />
+                    <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeSelectedDevice} getAll={this.getWorldMap} /> } />
+                    <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.changeSelectedDevice} getAll={this.getGeoLocation} /> } />
+                    <Route path="/tags"     render={() => <Tags data={this.state.theDevices} getDevicesByTag={this.getDevicesByTag} /> } />
                   </div>
                 }
               </div>
@@ -210,7 +204,7 @@ class App extends Component {
     }
   }
 
-  changeTargetId(id){
+  changeSelectedDevice(id){
     console.log('click', id);
     this.setState({selectedDevice: id}, () => {
       this.getSensorData();
