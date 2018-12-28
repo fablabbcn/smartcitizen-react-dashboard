@@ -7,7 +7,7 @@ class DeviceResults extends Component{
     return(
       <div className="row">
         <div className="col-12">
-          <h3>Tags</h3>
+          <h3>Devices</h3>
           <table className="table table-sm table-bordered table-hover table-striped table-responsive">
             <thead>
               <tr>
@@ -22,7 +22,7 @@ class DeviceResults extends Component{
             <tbody>
               {item.map((x,y) => {
                 return(
-                  <tr key={y} className="tr" onClick={() => this.props.changeSelectDevice(x['id'])} >
+                  <tr key={y} className="tr" onClick={() => this.props.changeSelectedDevice(x['id'])} >
                     <td><p>{x['id']} </p></td>
                     <td><p>{x['last_reading_at']}</p></td>
                     <td><p>{x['name']}</p></td>

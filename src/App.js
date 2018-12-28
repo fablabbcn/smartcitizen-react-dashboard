@@ -28,23 +28,25 @@ class App extends Component {
       isShowingWorldMap: true,
       owner: [],
       selectedDevice: 2440,
-      targetTag: '',
+      selectedTag: [],
       theData: [],
       theDevices: [],
       theKit: [],
       theReading: [],
       theSensors: [],
+      theTags: [],
       world_map: []
     };
     this.addFavoriteDevice = this.addFavoriteDevice.bind(this);
     this.changeSelectedDevice = this.changeSelectedDevice.bind(this);
     this.changeTargetIdInput = this.changeTargetIdInput.bind(this);
-    this.changeTargetTag = this.changeTargetTag.bind(this);
+    this.changeTag = this.changeTag.bind(this);
     this.getDevices = this.getDevices.bind(this);
     this.getDevicesByTag = this.getDevicesByTag.bind(this);
     this.getGeoLocation = this.getGeoLocation.bind(this);
     this.getReading = this.getReading.bind(this);
     this.getSensorData = this.getSensorData.bind(this);
+    this.getTags = this.getTags.bind(this);
     this.getWorldMap = this.getWorldMap.bind(this);
     this.isFavoriteDevice = this.isFavoriteDevice.bind(this);
     this.removeFavoriteDevice = this.removeFavoriteDevice.bind(this);
@@ -103,7 +105,13 @@ class App extends Component {
                     <Route path="/map"      render={() => <WorldMap />}/>
                     <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeSelectedDevice} getAll={this.getWorldMap} /> } />
                     <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} getAll={this.getGeoLocation} /> } />
-                    <Route path="/tags"     render={() => <Tags data={this.state.theDevices} getDevicesByTag={this.getDevicesByTag} /> } />
+                    <Route path="/tags"     render={() => <Tags devices={this.state.theDevices}
+                      getDevicesByTag={this.getDevicesByTag}
+                      tags={this.state.theTags}
+                      getTags={this.getTags}
+                      changeTag={this.changeTag}
+                      changeSelectedDevice={this.changeSelectedDevice}
+                      selectedTag={this.state.selectedTag} /> } />
                   </div>
                 }
               </div>
@@ -162,6 +170,7 @@ class App extends Component {
   componentDidMount(){
     this.getSensorData();
     this.getReading();
+    this.getTags();
     //this.getGeoLocation();
   }
 
@@ -201,10 +210,10 @@ class App extends Component {
     })
   }
 
-  changeTargetTag(event){
-    this.setState({targetTag: event.target.value}, () => {
-      //console.log(this.state.targetTag)
-    })
+  changeTag(selectedTag){
+    this.setState({ selectedTag: selectedTag.label });
+    this.getDevicesByTag(selectedTag.value)
+    //console.log(`Option selected:`, selectedTag);
   }
 
   getWorldMap(){
@@ -274,11 +283,7 @@ class App extends Component {
   getDevicesByTag(tag){
     console.log('getDevicesByTag: ', tag)
     let url = '';
-    if (typeof tag === 'string') {
-      url = "https://api.smartcitizen.me/v0/devices?with_tags=" + tag;
-    }else{
-      url = "https://api.smartcitizen.me/v0/devices?with_tags=" + this.state.targetTag;
-    }
+    url = "https://api.smartcitizen.me/v0/devices?with_tags=" + tag;
     //console.log(url)
     this.getDevices(url)
   }
@@ -316,6 +321,18 @@ class App extends Component {
         this.setState({
           theReading: responseJson.readings
         })
+      })
+  }
+
+  getTags(){
+    let theUrl = 'https://api.smartcitizen.me/v0/tags';
+    //console.log('getTags: ', theUrl);
+    return fetch(theUrl)
+      .then((response) =>  response.json())
+      .then((responseJson) => {
+        this.setState({ theTags: responseJson });
+      }).catch(err => {
+        console.log(err);
       })
   }
 
