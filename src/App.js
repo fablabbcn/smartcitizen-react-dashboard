@@ -8,6 +8,8 @@ import SckGraph from './SckGraph.js';
 import Tags from './Tags.js';
 import WorldMap from './WorldMap.js';
 import WorldMapList from './WorldMapList.js';
+import { FaGlobeAfrica, FaGripVertical, FaMap, FaRegStar, FaStar, FaChartLine } from 'react-icons/fa';
+
 
 
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
@@ -18,8 +20,11 @@ class App extends Component {
     this.state = {
       favoriteDevices: [],
       hasData: false,
-      isShowingKitInfo: false,
       isShowingDeviceList: true,
+      isShowingFavorites: false,
+      isShowingGraph: true,
+      isShowingKitInfo: false,
+      isShowingLive: true,
       isShowingWorldMap: false,
       owner: [],
       selectedDevice: 2440,
@@ -46,8 +51,11 @@ class App extends Component {
     this.sendToChart = this.sendToChart.bind(this);
     this.toggleFavoriteDevice = this.toggleFavoriteDevice.bind(this);
     this.toggleShowDevices = this.toggleShowDevices.bind(this);
+    this.toggleShowFavorites = this.toggleShowFavorites.bind(this);
+    this.toggleShowGraph = this.toggleShowGraph.bind(this);
     this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
     this.toggleShowWorldmap = this.toggleShowWorldmap.bind(this);
+    this.toggleShowLive = this.toggleShowLive.bind(this);
 
   }
 
@@ -58,64 +66,90 @@ class App extends Component {
       <div className="container-fluid">
         <Router>
           <div className="row main">
-
-            <div className="col-md-12">
+            <div className="col-md-12 sck-navbar">
               <ul className="list-inline">
-                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/nearby">Nearby</NavLink> </li>
-                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/map">WorldMap</NavLink> </li>
-                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/maplist">WorldMapList</NavLink> </li>
-                <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/tags">Tags</NavLink> </li>
+                <li className={"list-inline-item " + (this.state.isShowingFavorites ? "bg-dark" : "bg-light")}>
+                  <h3 onClick={this.toggleShowFavorites} className="m-2"> <FaStar /> </h3>
+                </li>
+                <li className={"list-inline-item " + (this.state.isShowingWorldMap ? "bg-dark" : "bg-light")}>
+                  <h3 onClick={this.toggleShowWorldmap} className="m-2"> <FaGlobeAfrica /> </h3>
+                </li>
+                <li className={"list-inline-item " + (this.state.isShowingLive ? "bg-dark" : "bg-light")}>
+                  <h3 onClick={this.toggleShowLive} className="m-2"> <FaGripVertical /> </h3>
+                </li>
+                <li className={"list-inline-item " + (this.state.isShowingGraph ? "bg-dark" : "bg-light")}>
+                  <h3 onClick={this.toggleShowGraph} className="m-2"> <FaChartLine /> </h3>
+                </li>
               </ul>
             </div>
 
-            <div className="col-12 col-md-6 col-xl-4">
-              <Route path="/" exact   render={() => <NearDevices data={this.state.theDevices} handler={this.changeTargetId} getAll={this.getGeoLocation} /> } />
-              <Route path="/map"      render={() => <WorldMap />}/>
-              <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeTargetId} getAll={this.getWorldMap} /> } />
-              <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.changeTargetId} getAll={this.getGeoLocation} /> } />
-              <Route path="/tags"     render={() => <Tags getDevicesByTag={this.getDevicesByTag} /> } />
-            </div>
-
-            <div className="col-12 col-md-6 col-xl-4">
-
-              <button className={"btn my-1 " + (this.state.isShowingKitInfo? "bg-grey" : "bg-black")}
-                onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info </button>
-
-              {this.state.isShowingKitInfo &&
-                  <div className="row py-3 my-2 bg-blue_light">
-                    <div className="col-6">
-                      <KitInfo data={this.state.theKit} />
-                    </div>
-                    <div className="col-6">
-                      <KitOwner data={this.state.owner} />
-                    </div>
-                  </div>
-              }
-
-              <div className="row">
-                <div className="col-12">
-                  <h3 className="text-center">Kit
-                    <input className="w-25 text-center mx-1" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
-                    Sensors
-                  </h3>
-
-                  <div className="favorite-devices">
-                    <button className={"btn my-1 " + (this.isFavoriteDevice(this.state.selectedDevice) ? "bg-grey" : "bg-black")}
-                      onClick={() => this.toggleFavoriteDevice(this.state.selectedDevice)} > {this.isFavoriteDevice(this.state.selectedDevice) ? 'Remove' : 'Add'} favorite device </button>
-
+            {(this.state.isShowingWorldMap || this.state.isShowingFavorites) &&
+              <div className="col-12 col-md-6 col-xl-3 sck-router ">
+                {this.state.isShowingFavorites &&
+                  <div className="favorite-devices p-2">
+                    <h3>Favorite Devices: </h3>
                     {
                       this.state.favoriteDevices.map((item, key) => {
                         return(
-                          <button className="btn btn-sm bg-yellow m-2" onClick={() => this.changeTargetId(item)}  key={key}>{item}</button>
-                        )
+                            <button className="btn btn-sm bg-yellow m-2" onClick={() => this.changeTargetId(item)}  key={key}>{item}</button>
+                            )
                       })
                     }
                   </div>
+                }
 
+                {this.state.isShowingWorldMap &&
+                  <div className="border p-2">
+                    <ul className="list-inline">
+                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/nearby">Nearby</NavLink> </li>
+                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/map">WorldMap</NavLink> </li>
+                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/maplist">WorldMapList</NavLink> </li>
+                      <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/tags">Tags</NavLink> </li>
+                    </ul>
+
+                    <p>(React Router - This is a work in progress!)</p>
+                    <Route path="/" exact   render={() => <NearDevices data={this.state.theDevices} handler={this.changeTargetId} getAll={this.getGeoLocation} /> } />
+                    <Route path="/map"      render={() => <WorldMap />}/>
+                    <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeTargetId} getAll={this.getWorldMap} /> } />
+                    <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} handler={this.changeTargetId} getAll={this.getGeoLocation} /> } />
+                    <Route path="/tags"     render={() => <Tags getDevicesByTag={this.getDevicesByTag} /> } />
+                  </div>
+                }
+              </div>
+            }
+
+            <div className="col-12 col-md-6 col-xl-4">
+              <div className="row">
+                <div className="col-12 border-top pt-2">
+                 <h3 className="text-center">
+                    Kit
+                    <input className="w-25 text-center mx-1" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
+                    Sensors
+
+                    <div className="d-inline" onClick={() => this.toggleFavoriteDevice(this.state.selectedDevice)} >
+                      {this.isFavoriteDevice(this.state.selectedDevice) ?
+                        <FaStar color={'orange'}/> :
+                        <FaRegStar/>
+                      }
+                    </div>
+                  </h3>
+                  <button className={"btn btn-sm d-block ml-auto my-1 " + (this.state.isShowingKitInfo? "bg-grey" : "btn-outline-secondary")}
+                    onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info
+                  </button>
+                  {this.state.isShowingKitInfo &&
+                      <div className="row py-3 my-2 bg-blue_light">
+                        <div className="col-6">
+                          <KitInfo data={this.state.theKit} />
+                        </div>
+                        <div className="col-6">
+                          <KitOwner data={this.state.owner} />
+                        </div>
+                      </div>
+                  }
                   <p className={"text-center " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.selectedDevice}</p>
                   <p>Last recorded at: {this.state.theData['recorded_at']}</p>
                 </div>
-                {
+                {this.state.isShowingLive &&
                   this.state.theSensors.map((item, key) => {
                     return(
                       <KitSensors data={item} key={key} sendToChart={this.sendToChart}/>
@@ -125,9 +159,11 @@ class App extends Component {
               </div>
             </div>
 
-            <div className="col-12 col-md-6 col-xl-4">
-              <SckGraph data={this.state.theReading} />
-            </div>
+            {this.state.isShowingGraph &&
+              <div className="col-12 col-md-6 col-xl-4">
+                <SckGraph data={this.state.theReading} />
+              </div>
+            }
 
             {/* end row */}
           </div>
@@ -320,6 +356,22 @@ class App extends Component {
 
   toggleShowWorldmap(){
     this.setState({isShowingWorldMap: !this.state.isShowingWorldMap})
+    console.log('show worldmap', this.state.isShowingWorldMap)
+  }
+
+  toggleShowFavorites(){
+    this.setState({isShowingFavorites: !this.state.isShowingFavorites})
+    console.log('show fav', this.state.isShowingFavorites)
+  }
+
+  toggleShowGraph(){
+    this.setState({isShowingGraph: !this.state.isShowingGraph})
+    console.log('show Graph', this.state.isShowingGraph)
+  }
+
+  toggleShowLive(){
+    this.setState({isShowingLive: !this.state.isShowingLive})
+    console.log('show live', this.state.isShowingLive)
   }
 
 }
