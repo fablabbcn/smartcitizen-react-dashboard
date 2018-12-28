@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import FavoriteDevices from './FavoriteDevices.js';
 import KitSensors from './KitSensors.js';
-import KitOwner from './KitOwner.js';
-import KitInfo from './KitInfo.js';
+import DeviceInfo from './DeviceInfo.js';
 import NearDevices from './NearDevices.js';
 import SckGraph from './SckGraph.js';
 import Tags from './Tags.js';
@@ -112,6 +111,7 @@ class App extends Component {
               </div>
             }
 
+            {this.state.isShowingLive &&
             <div className="col-12 col-md-6 col-xl-4">
               <div className="row">
                 <div className="col-12 border-top pt-2">
@@ -131,19 +131,12 @@ class App extends Component {
                     onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info
                   </button>
                   {this.state.isShowingKitInfo &&
-                      <div className="row py-3 my-2 bg-blue_light">
-                        <div className="col-6">
-                          <KitInfo data={this.state.theKit} />
-                        </div>
-                        <div className="col-6">
-                          <KitOwner data={this.state.owner} />
-                        </div>
-                      </div>
+                    <DeviceInfo kit={this.state.theKit} owner={this.state.owner} />
                   }
                   <p className={"text-center " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.selectedDevice}</p>
                   <p>Last recorded at: {this.state.theData['recorded_at']}</p>
                 </div>
-                {this.state.isShowingLive &&
+                {
                   this.state.theSensors.map((item, key) => {
                     return(
                       <KitSensors data={item} key={key} sendToChart={this.sendToChart}/>
@@ -152,6 +145,7 @@ class App extends Component {
                 }
               </div>
             </div>
+            }
 
             {this.state.isShowingGraph &&
               <div className="col-12 col-md-6 col-xl-4">
