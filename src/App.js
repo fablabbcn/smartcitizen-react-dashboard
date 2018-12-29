@@ -101,10 +101,9 @@ class App extends Component {
                     </ul>
 
                     <p>(React Router - This is a work in progress!)</p>
-                    <Route path="/" exact   render={() => <NearDevices data={this.state.theDevices} getAll={this.getGeoLocation} /> } />
                     <Route path="/map"      render={() => <WorldMap />}/>
                     <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeSelectedDevice} getAll={this.getWorldMap} /> } />
-                    <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} getAll={this.getGeoLocation} /> } />
+                    <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} getAll={this.getGeoLocation} changeSelectedDevice={this.changeSelectedDevice} /> } />
                     <Route path="/tags"     render={() => <Tags devices={this.state.theDevices}
                       getDevicesByTag={this.getDevicesByTag}
                       tags={this.state.theTags}
