@@ -17,42 +17,47 @@ class KitSensors extends Component{
     const ratio = value < 100 ? value/100 : 1;
     //return { backgroundColor: `rgb(${ratioToRGB(ratio).join(',')})` };
 
+    // Some sensors should give green when value is high like BAT, but others the opposite, like dB, or even mid range (temp)
+    // Lower  is better: noise (db), all PMs
+    // Medium is better: temp, pressure, humid, solar, wifi?, co
+    // Higher is better: bat?
+
     //humid
-    if (id === 5 || id === 13 || id === 56) { return this.evaluateColor(value, 16, 90); }
+    if (id === 5 || id === 13 || id === 56) { return this.evaluateColor(value, 16, 90, 'red', 'forestgreen', 'cornflowerblue'); }
     // solar panel | light sensor
-    if (id === 6 || id === 11 || id === 14 || id === 18) { return this.evaluateColor(value, 16, 27); }
+    if (id === 6 || id === 11 || id === 14 || id === 18) { return this.evaluateColor(value, 16, 27, 'cornflowerblue', 'forestgreen', 'red'); }
     // loudness
-    if (id === 7 || id === 53)  { return this.evaluateColor(value, 36, 70); }
+    if (id === 7 || id === 53)  { return this.evaluateColor(value, 36, 70, 'cornflowerblue', 'forestgreen', 'red'); }
     //wifi
-    if (id === 8 || id === 9 || id === 21) { return this.evaluateColor(value, 0, 100); }
+    if (id === 8 || id === 9 || id === 21) { return this.evaluateColor(value, 0, 100, 'cornflowerblue', 'forestgreen', 'red'); }
     // temp
-    if (id === 12 || id === 55) { return this.evaluateColor(value, 18, 27); }
+    if (id === 12 || id === 55) { return this.evaluateColor(value, 18, 27, 'cornflowerblue', 'forestgreen', 'red'); }
     //bat
-    if (id === 17) { return this.evaluateColor(value, 15, 101); }
+    if (id === 17 || id === 10) { return this.evaluateColor(value, 15, 85, 'red', 'yellow', 'forestgreen'); }
     //no2
-    if (id === 15) { return this.evaluateColor(value, 3300, 3315); }
+    if (id === 15) { return this.evaluateColor(value, 3300, 3615, 'cornflowerblue', 'forestgreen', 'red'); }
     // pressure
-    if (id === 58) { return this.evaluateColor(value, 101, 103); }
+    if (id === 58) { return this.evaluateColor(value, 101, 103, 'cornflowerblue', 'forestgreen', 'red'); }
     // co
-    if (id === 16) { return this.evaluateColor(value, 390, 425); }
+    if (id === 16) { return this.evaluateColor(value, 390, 425, 'orange', 'forestgreen', 'red'); }
     // pm 1
-    if (id === 89) { return this.evaluateColor(value, 20, 50); }
+    if (id === 89) { return this.evaluateColor(value, 20, 50, 'forestgreen', 'orange', 'red'); }
     // pm 2.5
-    if (id === 87) { return this.evaluateColor(value, 20, 50); }
+    if (id === 87) { return this.evaluateColor(value, 20, 50, 'forestgreen', 'orange', 'red'); }
     // pm 10
-    if (id === 88) { return this.evaluateColor(value, 35, 100); }
+    if (id === 88) { return this.evaluateColor(value, 35, 100, 'forestgreen', 'orange', 'red'); }
 
     // if no id matches
     return '';
   }
 
-  evaluateColor(value,low,high){
+  evaluateColor(value, low, high, c1, c2, c3){
     // Returns a valid CSS color code like  'orange','#ccc' or 'rgb(255,255,243,0.5)'
     // Gets 2 thresholds, low and high. For temperature example (16,27)
     // values below 16 are cold (blue), above 27 (red), between: green
-    if (value < low) { return 'cornflowerblue' }
-    if (value > high) { return 'red' }
-    return 'forestgreen';
+    if (value < low) { return c1 }
+    if (value > high) { return c3 }
+    return c2;
   }
 
   getIcon(id, value){
