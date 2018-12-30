@@ -26,7 +26,7 @@ class App extends Component {
       isShowingKitInfo: false,
       isShowingLive: true,
       isShowingSensorDetails: false,
-      isShowingWorldMap: false,
+      isShowingWorldMap: true,
       owner: [],
       selectedDevice: 2440,
       selectedTag: [],
