@@ -170,7 +170,16 @@ class App extends Component {
     this.getSensorData();
     this.getReading();
     this.getTags();
+    // Add fav devices, if they exist in localstorage
+    if(localStorage.favoriteDevices){
+      this.setState({favoriteDevices: JSON.parse(localStorage.favoriteDevices)})
+    }
     //this.getGeoLocation();
+  }
+  componentDidUpdate(prevProps, prevState){
+    // After any prop or state change:
+    // Save fave devices to a localStorage object, to survive reloads of the page
+    localStorage.favoriteDevices = JSON.stringify(this.state.favoriteDevices)
   }
 
   addFavoriteDevice(deviceId){

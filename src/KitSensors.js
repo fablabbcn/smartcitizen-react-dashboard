@@ -14,7 +14,7 @@ import {
 class KitSensors extends Component{
 
   getBgColor(id, value){
-    const ratio = value < 100 ? value/100 : 1;
+    //const ratio = value < 100 ? value/100 : 1;
     //return { backgroundColor: `rgb(${ratioToRGB(ratio).join(',')})` };
 
     // Some sensors should give green when value is high like BAT, but others the opposite, like dB, or even mid range (temp)
@@ -25,7 +25,7 @@ class KitSensors extends Component{
     //humid
     if (id === 5 || id === 13 || id === 56) { return this.evaluateColor(value, 16, 90, 'red', 'forestgreen', 'cornflowerblue'); }
     // solar panel | light sensor
-    if (id === 6 || id === 11 || id === 14 || id === 18) { return this.evaluateColor(value, 16, 27, 'cornflowerblue', 'forestgreen', 'red'); }
+    if (id === 6 || id === 11 || id === 14 || id === 18) { return this.evaluateColor(value, 150, 270, 'grey', 'orange', 'yellow'); }
     // loudness
     if (id === 7 || id === 53)  { return this.evaluateColor(value, 36, 70, 'cornflowerblue', 'forestgreen', 'red'); }
     //wifi
@@ -51,13 +51,13 @@ class KitSensors extends Component{
     return '';
   }
 
-  evaluateColor(value, low, high, c1, c2, c3){
-    // Returns a valid CSS color code like  'orange','#ccc' or 'rgb(255,255,243,0.5)'
-    // Gets 2 thresholds, low and high. For temperature example (16,27)
-    // values below 16 are cold (blue), above 27 (red), between: green
-    if (value < low) { return c1 }
-    if (value > high) { return c3 }
-    return c2;
+  // Gets 2 thresholds, low and high. For temperature example: (value,16,27,'blue','green','red')
+  // values below 16 are cold (blue), above 27 (red), between: green
+  // Returns a valid CSS color code like  'orange','#ccc' or 'rgb(255,255,243,0.5)'
+  evaluateColor(value, low, high, colorLow, colorMiddle, colorHigh){
+    if (value < low) { return colorLow }
+    if (value > high) { return colorHigh }
+    return colorMiddle;
   }
 
   getIcon(id, value){
