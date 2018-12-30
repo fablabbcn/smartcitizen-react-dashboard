@@ -3,14 +3,15 @@ import './App.css';
 import FavoriteDevices from './FavoriteDevices.js';
 import KitSensors from './KitSensors.js';
 import DeviceInfo from './DeviceInfo.js';
+import DatePicker from "react-datepicker";
 import NearDevices from './NearDevices.js';
 import SckGraph from './SckGraph.js';
 import Tags from './Tags.js';
 import WorldMap from './WorldMap.js';
 import WorldMapList from './WorldMapList.js';
-import { FaGlobeAfrica, FaGripVertical, FaRegStar, FaGlobe, FaList, FaStar,FaSearchLocation, FaTags, FaChartLine } from 'react-icons/fa';
+import { FaCalendarAlt, FaGlobeAfrica, FaGripVertical, FaRegStar, FaGlobe, FaList, FaStar,FaSearchLocation, FaTags, FaChartLine } from 'react-icons/fa';
 
-
+import "react-datepicker/dist/react-datepicker.css";
 
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 
@@ -29,6 +30,9 @@ class App extends Component {
       isShowingWorldMap: true,
       owner: [],
       selectedDevice: 2440,
+      selectedSensor: 7,
+      selectedFromDate: new Date(new Date().setDate(new Date().getDate()-2)),
+      selectedToDate: new Date(),
       selectedTag: [],
       theData: [],
       theDevices: [],
@@ -42,6 +46,9 @@ class App extends Component {
     };
     this.addFavoriteDevice = this.addFavoriteDevice.bind(this);
     this.changeSelectedDevice = this.changeSelectedDevice.bind(this);
+    this.changeSelectedSensor = this.changeSelectedSensor.bind(this);
+    this.changeFromDate = this.changeFromDate.bind(this);
+    this.changeToDate = this.changeToDate.bind(this);
     this.changeTargetIdInput = this.changeTargetIdInput.bind(this);
     this.changeTag = this.changeTag.bind(this);
     this.getDevices = this.getDevices.bind(this);
@@ -53,7 +60,6 @@ class App extends Component {
     this.getWorldMap = this.getWorldMap.bind(this);
     this.isFavoriteDevice = this.isFavoriteDevice.bind(this);
     this.removeFavoriteDevice = this.removeFavoriteDevice.bind(this);
-    this.sendToChart = this.sendToChart.bind(this);
     this.toggleFavoriteDevice = this.toggleFavoriteDevice.bind(this);
     this.toggleShowDevices = this.toggleShowDevices.bind(this);
     this.toggleShowFavorites = this.toggleShowFavorites.bind(this);
@@ -90,7 +96,7 @@ class App extends Component {
             </div>
 
             {(this.state.isShowingWorldMap || this.state.isShowingFavorites) &&
-              <div className="col-12 col-md-6 col-xl-4 sck-router ">
+              <div className="col-12 col-md-6 col-xl-4 mb-3 sck-router">
                 {this.state.isShowingFavorites &&
                   <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
                 }
@@ -129,9 +135,9 @@ class App extends Component {
             }
 
             {this.state.isShowingLive &&
-            <div className="col-12 col-md-6 col-xl-4">
-              <div className="row border-top">
-                <div className="col-12 mt-2">
+            <div className="col-12 col-md-6 col-xl-4 mb-3">
+              <div className="row">
+                <div className="col-12">
                  <h3 className="text-center">
                     Kit
                     <input className="w-25 text-center mx-1" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
@@ -165,7 +171,7 @@ class App extends Component {
                 {
                   this.state.theSensors.map((item, key) => {
                     return(
-                      <KitSensors data={item} key={key} showDetails={this.state.isShowingSensorDetails} sendToChart={this.sendToChart}/>
+                      <KitSensors data={item} key={key} showDetails={this.state.isShowingSensorDetails} changeSelectedSensor={this.changeSelectedSensor}/>
                     )
                   })
                 }
@@ -174,7 +180,13 @@ class App extends Component {
             }
 
             {this.state.isShowingGraph &&
-              <div className="col-12 col-md-6 col-xl-4">
+              <div className="col-12 col-md-6 col-xl-4 ">
+                <FaCalendarAlt />
+                <span className="mx-2">From:</span>
+                <DatePicker className="form-control " placeholderText="From" selected={this.state.selectedFromDate} onChange={this.changeFromDate} />
+                <span className="mx-2">To:</span>
+                <DatePicker className="form-control " placeholderText="From" selected={this.state.selectedToDate} onChange={this.changeToDate} />
+
                 <SckGraph data={this.state.theReading} />
               </div>
             }
@@ -224,6 +236,17 @@ class App extends Component {
       newArr.splice(index, 1);
       this.setState({ favoriteDevices: newArr });
     }
+  }
+
+  changeFromDate(date){
+    this.setState({selectedFromDate: date}, () => {
+      this.getReading();
+    });
+  }
+  changeToDate(date){
+    this.setState({selectedToDate: date}, () => {
+      this.getReading();
+    });
   }
 
   changeSelectedDevice(id){
@@ -324,27 +347,12 @@ class App extends Component {
     this.getDevices(url)
   }
 
-  getReading(deviceid, sensorid){
+  getReading(){
+    let from_date = (this.state.selectedFromDate).toISOString().slice(0,10);
+    let to_date = (this.state.selectedToDate).toISOString().slice(0,10);
 
-    let devid = 1616; //Default testing
-    let sensid = 7; //Default test
-    if(deviceid){
-      console.log('getReading for:', deviceid)
-      devid = deviceid
-    }
-    if(sensorid){
-      sensid = sensorid;
-    }
-
-    let today = new Date();
-    let yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1) //Epoch
-
-    let from_date = new Date(yesterday).toISOString().slice(0,10);
-    let to_date = new Date().toISOString().slice(0,10);
-
-    let url = "https://api.smartcitizen.me/v0/devices/" + devid +
-      "/readings?sensor_id=" + sensid + "&rollup=4h&from=" + from_date +
+    let url = "https://api.smartcitizen.me/v0/devices/" + this.state.selectedDevice +
+      "/readings?sensor_id=" + this.state.selectedSensor + "&rollup=4h&from=" + from_date +
       "&to=" + to_date;
     return fetch(url)
       .then((response) => response.json())
@@ -352,7 +360,10 @@ class App extends Component {
         this.setState({
           theReading: responseJson.readings
         })
+      }).catch(err => {
+        console.log(err)
       })
+
   }
 
   getTags(){
@@ -367,9 +378,11 @@ class App extends Component {
       })
   }
 
-  sendToChart(sensorid){
-    console.log('sendToChart ', sensorid)
-    this.getReading(this.state.selectedDevice, sensorid);
+  changeSelectedSensor(sensorid){
+    console.log('changeSelectedSensor ', sensorid);
+    this.setState({selectedSensor: sensorid}, () => {
+      this.getReading();
+    });
   }
 
   toggleFavoriteDevice(deviceId){

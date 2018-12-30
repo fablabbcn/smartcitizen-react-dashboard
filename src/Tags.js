@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import DeviceResults from './DeviceResults';
-import Taglist from './Taglist';
 import Select from 'react-select';
 
 class Tags extends Component{

@@ -93,11 +93,10 @@ class KitSensors extends Component{
 
   render(){
     let item = this.props.data;
-    let showDetails = this.props.showDetails;
     return(
       <div style={{ backgroundColor: this.getBgColor(item['id'], item['value']) }}
            className="p-2 col-6 col-xl-4"
-           onClick={() => this.props.sendToChart(item['id'])} >
+           onClick={() => this.props.changeSelectedSensor(item['id'])} >
         {this.props.showDetails &&
           <p>{item['description']}</p>
         }

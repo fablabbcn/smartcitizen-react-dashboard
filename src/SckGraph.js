@@ -9,10 +9,12 @@ class SckGraph extends Component{
     let xxx = [];
     let yyy = [];
 
-    item.forEach(([x, y]) => {
-      xxx.push(x)
-      yyy.push(y)
-    })
+    if (item) {
+      item.forEach(([x, y]) => {
+        xxx.push(x)
+        yyy.push(y)
+      })
+    }
 
     return(
       <Plot
