@@ -21,11 +21,12 @@ class App extends Component {
       favoriteDevices: [],
       hasData: false,
       isShowingDeviceList: true,
-      isShowingFavorites: true,
+      isShowingFavorites: false,
       isShowingGraph: true,
       isShowingKitInfo: false,
       isShowingLive: true,
-      isShowingWorldMap: true,
+      isShowingSensorDetails: false,
+      isShowingWorldMap: false,
       owner: [],
       selectedDevice: 2440,
       selectedTag: [],
@@ -35,6 +36,8 @@ class App extends Component {
       theReading: [],
       theSensors: [],
       theTags: [],
+      userLat: [],
+      userLong: [],
       world_map: []
     };
     this.addFavoriteDevice = this.addFavoriteDevice.bind(this);
@@ -58,6 +61,7 @@ class App extends Component {
     this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
     this.toggleShowWorldmap = this.toggleShowWorldmap.bind(this);
     this.toggleShowLive = this.toggleShowLive.bind(this);
+    this.toggleShowSensorDetails = this.toggleShowSensorDetails.bind(this);
 
   }
 
@@ -86,7 +90,7 @@ class App extends Component {
             </div>
 
             {(this.state.isShowingWorldMap || this.state.isShowingFavorites) &&
-              <div className="col-12 col-md-6 col-xl-3 sck-router ">
+              <div className="col-12 col-md-6 col-xl-4 sck-router ">
                 {this.state.isShowingFavorites &&
                   <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
                 }
@@ -102,8 +106,16 @@ class App extends Component {
 
                     <p>(React Router - This is a work in progress!)</p>
                     <Route path="/map"      render={() => <WorldMap />}/>
-                    <Route path="/maplist"  render={() => <WorldMapList data={this.state.world_map} handler={this.changeSelectedDevice} getAll={this.getWorldMap} /> } />
-                    <Route path="/nearby"   render={() => <NearDevices data={this.state.theDevices} getAll={this.getGeoLocation} changeSelectedDevice={this.changeSelectedDevice} /> } />
+                    <Route path="/maplist"  render={() => <WorldMapList
+                      data={this.state.world_map}
+                      handler={this.changeSelectedDevice}
+                      getAll={this.getWorldMap} /> } />
+                    <Route path="/nearby"   render={() => <NearDevices
+                      data={this.state.theDevices}
+                      getAll={this.getGeoLocation}
+                      changeSelectedDevice={this.changeSelectedDevice}
+                      userLat={this.state.userLat}
+                      userLong={this.state.userLong} /> } />
                     <Route path="/tags"     render={() => <Tags devices={this.state.theDevices}
                       getDevicesByTag={this.getDevicesByTag}
                       tags={this.state.theTags}
@@ -118,8 +130,8 @@ class App extends Component {
 
             {this.state.isShowingLive &&
             <div className="col-12 col-md-6 col-xl-4">
-              <div className="row">
-                <div className="col-12 border-top pt-2">
+              <div className="row border-top">
+                <div className="col-12 mt-2">
                  <h3 className="text-center">
                     Kit
                     <input className="w-25 text-center mx-1" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
@@ -132,19 +144,28 @@ class App extends Component {
                       }
                     </div>
                   </h3>
-                  <button className={"btn btn-sm d-block ml-auto my-1 " + (this.state.isShowingKitInfo? "bg-grey" : "btn-outline-secondary")}
-                    onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info
-                  </button>
+                  <div className="text-right">
+                    <p className="d-inline mr-2 m-0">Last recorded at: {this.state.theData['recorded_at']}</p>
+                    <button className={"btn btn-sm m-1 " + (this.state.isShowingSensorDetails? "bg-grey" : "btn-outline-secondary")}
+                      onClick={this.toggleShowSensorDetails} > {this.state.isShowingSensorDetails ? 'Hide' : 'Show'} Sensor Details
+                    </button>
+                    <button className={"btn btn-sm m-1 " + (this.state.isShowingKitInfo? "bg-grey" : "btn-outline-secondary")}
+                      onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info
+                    </button>
+                  </div>
                   {this.state.isShowingKitInfo &&
                     <DeviceInfo kit={this.state.theKit} owner={this.state.owner} />
                   }
-                  <p className={"text-center " + (this.state.hasData ? " bg-green" : " bg-red") }> {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.selectedDevice}</p>
-                  <p>Last recorded at: {this.state.theData['recorded_at']}</p>
+                  {!this.state.hasData &&
+                    <p className={"text-center m-0" + (this.state.hasData ? " bg-green" : " bg-red") }>
+                    {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.selectedDevice}
+                    </p>
+                  }
                 </div>
                 {
                   this.state.theSensors.map((item, key) => {
                     return(
-                      <KitSensors data={item} key={key} sendToChart={this.sendToChart}/>
+                      <KitSensors data={item} key={key} showDetails={this.state.isShowingSensorDetails} sendToChart={this.sendToChart}/>
                     )
                   })
                 }
@@ -276,13 +297,15 @@ class App extends Component {
   }
 
   getGeoLocation(){
-    var x = document.getElementById("geo");
     var that = this;
 
     if (navigator.geolocation) {
       //console.log('Navigator works')
       navigator.geolocation.getCurrentPosition(function(position){
-        x.innerHTML = "Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude;
+        that.setState({
+          userLat: position.coords.latitude,
+          userLong:  position.coords.longitude
+        })
         that.getDevicesNear(position.coords.latitude, position.coords.longitude)
       });
     }
@@ -379,6 +402,10 @@ class App extends Component {
 
   toggleShowLive(){
     this.setState({isShowingLive: !this.state.isShowingLive})
+  }
+
+  toggleShowSensorDetails(){
+    this.setState({isShowingSensorDetails: !this.state.isShowingSensorDetails})
   }
 
 }

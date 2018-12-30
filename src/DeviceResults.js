@@ -12,11 +12,11 @@ class DeviceResults extends Component{
             <thead>
               <tr>
                 <th>ID</th>
+                <th>Sensors</th>
                 <th>Last Reading</th>
                 <th>Name</th>
                 <th>Username</th>
                 <th>City</th>
-                <th>Sensors</th>
               </tr>
             </thead>
             <tbody>
@@ -24,11 +24,11 @@ class DeviceResults extends Component{
                 return(
                   <tr key={y} className="tr" onClick={() => this.props.changeSelectedDevice(x['id'])} >
                     <td><p>{x['id']} </p></td>
+                    <td><p>{x['data']['sensors'].length}</p></td>
                     <td><p>{x['last_reading_at']}</p></td>
                     <td><p>{x['name']}</p></td>
                     <td><p>{x['owner'] ? x['owner']['username'] : ''}</p></td>
                     <td><p>{x['owner'] ? x['owner']['location']['city'] : ''}</p></td>
-                    <td><p>{x['data']['sensors'].length}</p></td>
                   </tr>
                 )
               })}

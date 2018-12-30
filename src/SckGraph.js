@@ -16,8 +16,15 @@ class SckGraph extends Component{
 
     return(
       <Plot
+        useResizeHandler
         data={[ {type: 'scatter', x: xxx, y: yyy}, ]}
-        layout={{autosize: true,  height: 440, title: 'React - Plotly (the last day)'}}
+        style={{ width: '100%'}}
+        layout={{
+          autosize: true,
+          title: 'React - Plotly (the last day)',
+          automargin: true,
+          responsive: true
+        }}
       />
     )
   }

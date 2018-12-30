@@ -93,17 +93,22 @@ class KitSensors extends Component{
 
   render(){
     let item = this.props.data;
+    let showDetails = this.props.showDetails;
     return(
       <div style={{ backgroundColor: this.getBgColor(item['id'], item['value']) }}
-           className="p-3 col-6 col-xl-4 d-flex justify-content-between flex-column"
+           className="p-2 col-6 col-xl-4"
            onClick={() => this.props.sendToChart(item['id'])} >
-        <p>{item['description']}</p>
+        {this.props.showDetails &&
+          <p>{item['description']}</p>
+        }
         <div className="text-center my-3">
           <h1 className="mb-0">{Math.round(item['value'] * 100)/100}</h1>
           <p className=""> {item['unit']}</p>
           <h4>{this.getIcon(item['id'], item['value'])}</h4>
         </div>
-        <p className="text-left">{item['name']} - id: { item['id'] }</p>
+        {this.props.showDetails &&
+          <p className="text-left">{item['name']} - id: { item['id'] }</p>
+        }
       </div>
     )
   }
