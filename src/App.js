@@ -78,7 +78,7 @@ class App extends Component {
       <div className="container-fluid">
         <Router>
           <div className="row main">
-            <div className="col-md-12 sck-navbar">
+            <div className="col-md-12 text-center sck-navbar">
               <ul className="list-inline">
                 <li className={"list-inline-item " + (this.state.isShowingFavorites ? "bg-secondary" : "bg-light")}>
                   <h3 onClick={this.toggleShowFavorites} className="m-2"> <FaStar /> </h3>
@@ -114,7 +114,7 @@ class App extends Component {
                     <Route path="/map"      render={() => <WorldMap />}/>
                     <Route path="/maplist"  render={() => <WorldMapList
                       data={this.state.world_map}
-                      handler={this.changeSelectedDevice}
+                      changeSelectedDevice={this.changeSelectedDevice}
                       getAll={this.getWorldMap} /> } />
                     <Route path="/nearby"   render={() => <NearDevices
                       data={this.state.theDevices}
@@ -151,7 +151,7 @@ class App extends Component {
                     </div>
                   </h3>
                   <div className="text-right">
-                    <p className="d-inline mr-2 m-0">Last recorded at: {this.state.theData['recorded_at']}</p>
+                    <p className="d-inline mr-2 m-0"><b>recorded_at:</b> {this.state.theData['recorded_at']}</p>
                     <button className={"btn btn-sm m-1 " + (this.state.isShowingSensorDetails? "bg-grey" : "btn-outline-secondary")}
                       onClick={this.toggleShowSensorDetails} > {this.state.isShowingSensorDetails ? 'Hide' : 'Show'} Sensor Details
                     </button>
