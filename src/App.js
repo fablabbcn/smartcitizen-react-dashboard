@@ -182,7 +182,11 @@ class App extends Component {
 
             {this.state.isShowingGraph &&
               <div className="col-12 col-md-6 col-xl-4 ">
-                <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={this.adjustGraph}>Adjust to latest data</button>
+                <div className="btn btn-group">
+                  <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={() => this.adjustGraph('123456789')}>Last 24h</button>
+                  <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={() => this.adjustGraph('623456789')}>Last week</button>
+                  <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={() => this.adjustGraph('2523456789')}>Last month</button>
+                </div>
                 <div className="row">
                   <div className="col-6 ">
                     <span className="d-block"><FaCalendarAlt /> From:</span>
@@ -229,9 +233,9 @@ class App extends Component {
     }));
   }
 
-  adjustGraph(){
+  adjustGraph(range = 123456789){
     this.setState({
-      selectedFromDate: new Date(new Date(this.state.theData['recorded_at']) - 123456789 ),
+      selectedFromDate: new Date(new Date(this.state.theData['recorded_at']) - range ),
       selectedToDate: new Date(this.state.theData['recorded_at']),
     }, () => {
       this.getReading();
