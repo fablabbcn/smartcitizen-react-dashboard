@@ -6,7 +6,9 @@ body{
 .border{
   border: 2px solid black !important;
 }
-
+.sc-sensor-outer{
+  border: 1px solid white;
+}
 .bg-black{
   background-color: #2E2E2E;
   color: white;
