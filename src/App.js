@@ -81,17 +81,17 @@ class App extends Component {
           <div className="row main">
             <div className="col-md-12 text-center sck-navbar fixed-top">
               <ul className="list-inline">
-                <li className={"list-inline-item " + (this.state.isShowingFavorites ? "bg-yellow" : "bg-grey")}>
-                  <h3 onClick={this.toggleShowFavorites} className="m-2"> <FaStar /> </h3>
+                <li onClick={this.toggleShowFavorites} className={"list-inline-item " + (this.state.isShowingFavorites ? "bg-yellow" : "bg-grey")}>
+                  <h3 className="m-2"> <FaStar /> </h3>
                 </li>
-                <li className={"list-inline-item " + (this.state.isShowingWorldMap ? "bg-yellow" : "bg-grey")}>
-                  <h3 onClick={this.toggleShowWorldmap} className="m-2"> <FaGlobeAfrica /> </h3>
+                <li onClick={this.toggleShowWorldmap} className={"list-inline-item " + (this.state.isShowingWorldMap ? "bg-yellow" : "bg-grey")}>
+                  <h3 className="m-2"> <FaGlobeAfrica /> </h3>
                 </li>
-                <li className={"list-inline-item " + (this.state.isShowingLive ? "bg-yellow" : "bg-grey")}>
-                  <h3 onClick={this.toggleShowLive} className="m-2"> <FaGripVertical /> </h3>
+                <li onClick={this.toggleShowLive} className={"list-inline-item " + (this.state.isShowingLive ? "bg-yellow" : "bg-grey")}>
+                  <h3 className="m-2"> <FaGripVertical /> </h3>
                 </li>
-                <li className={"list-inline-item " + (this.state.isShowingGraph ? "bg-yellow" : "bg-grey")}>
-                  <h3 onClick={this.toggleShowGraph} className="m-2"> <FaChartLine /> </h3>
+                <li onClick={this.toggleShowGraph} className={"list-inline-item " + (this.state.isShowingGraph ? "bg-yellow" : "bg-grey")}>
+                  <h3 className="m-2"> <FaChartLine /> </h3>
                 </li>
               </ul>
             </div>
