@@ -23,7 +23,7 @@ class SckGraph extends Component{
         style={{ width: '100%'}}
         layout={{
           autosize: true,
-          title: 'React - Plotly (the last day)',
+          title: 'React - Plotly',
           automargin: true,
           responsive: true
         }}

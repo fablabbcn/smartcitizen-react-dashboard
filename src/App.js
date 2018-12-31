@@ -45,6 +45,7 @@ class App extends Component {
       world_map: []
     };
     this.addFavoriteDevice = this.addFavoriteDevice.bind(this);
+    this.adjustGraph = this.adjustGraph.bind(this);
     this.changeSelectedDevice = this.changeSelectedDevice.bind(this);
     this.changeSelectedSensor = this.changeSelectedSensor.bind(this);
     this.changeFromDate = this.changeFromDate.bind(this);
@@ -181,11 +182,18 @@ class App extends Component {
 
             {this.state.isShowingGraph &&
               <div className="col-12 col-md-6 col-xl-4 ">
-                <FaCalendarAlt />
-                <span className="mx-2">From:</span>
-                <DatePicker className="form-control " placeholderText="From" selected={this.state.selectedFromDate} onChange={this.changeFromDate} />
-                <span className="mx-2">To:</span>
-                <DatePicker className="form-control " placeholderText="From" selected={this.state.selectedToDate} onChange={this.changeToDate} />
+                <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={this.adjustGraph}>Adjust to latest data</button>
+                <div className="row">
+                  <div className="col-6 ">
+                    <span className="d-block"><FaCalendarAlt /> From:</span>
+                    <DatePicker className="form-control " placeholderText="From" selected={this.state.selectedFromDate} onChange={this.changeFromDate} />
+                  </div>
+                  <div className="col-6 ">
+                    <span className="d-block"><FaCalendarAlt /> To:</span>
+                    <DatePicker className="form-control " placeholderText="From" selected={this.state.selectedToDate} onChange={this.changeToDate} />
+                  </div>
+
+                </div>
 
                 <SckGraph data={this.state.theReading} />
               </div>
@@ -221,6 +229,15 @@ class App extends Component {
     }));
   }
 
+  adjustGraph(){
+    this.setState({
+      selectedFromDate: new Date(new Date(this.state.theData['recorded_at']) - 123456789 ),
+      selectedToDate: new Date(this.state.theData['recorded_at']),
+    }, () => {
+      this.getReading();
+    });
+  }
+
   isFavoriteDevice(deviceId){
     if (this.state.favoriteDevices.indexOf(deviceId) > -1) {
       //console.log('Device is favorite', deviceId)
@@ -228,6 +245,7 @@ class App extends Component {
     }
     return false;
   }
+
   removeFavoriteDevice(deviceId){
     let newArr = this.state.favoriteDevices;
     let index = newArr.indexOf(deviceId);
