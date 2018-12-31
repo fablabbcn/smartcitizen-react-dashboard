@@ -79,22 +79,23 @@ class App extends Component {
       <div className="container-fluid">
         <Router>
           <div className="row main">
-            <div className="col-md-12 text-center sck-navbar">
+            <div className="col-md-12 text-center sck-navbar fixed-top">
               <ul className="list-inline">
-                <li className={"list-inline-item " + (this.state.isShowingFavorites ? "bg-secondary" : "bg-light")}>
+                <li className={"list-inline-item " + (this.state.isShowingFavorites ? "bg-yellow" : "bg-grey")}>
                   <h3 onClick={this.toggleShowFavorites} className="m-2"> <FaStar /> </h3>
                 </li>
-                <li className={"list-inline-item " + (this.state.isShowingWorldMap ? "bg-secondary" : "bg-light")}>
+                <li className={"list-inline-item " + (this.state.isShowingWorldMap ? "bg-yellow" : "bg-grey")}>
                   <h3 onClick={this.toggleShowWorldmap} className="m-2"> <FaGlobeAfrica /> </h3>
                 </li>
-                <li className={"list-inline-item " + (this.state.isShowingLive ? "bg-secondary" : "bg-light")}>
+                <li className={"list-inline-item " + (this.state.isShowingLive ? "bg-yellow" : "bg-grey")}>
                   <h3 onClick={this.toggleShowLive} className="m-2"> <FaGripVertical /> </h3>
                 </li>
-                <li className={"list-inline-item " + (this.state.isShowingGraph ? "bg-secondary" : "bg-light")}>
+                <li className={"list-inline-item " + (this.state.isShowingGraph ? "bg-yellow" : "bg-grey")}>
                   <h3 onClick={this.toggleShowGraph} className="m-2"> <FaChartLine /> </h3>
                 </li>
               </ul>
             </div>
+            <div className="col-12 empty" style={{height:'55px'}}>&nbsp;</div>
 
             {(this.state.isShowingWorldMap || this.state.isShowingFavorites) &&
               <div className="col-12 col-md-6 col-xl-4 mb-3 sck-router">
