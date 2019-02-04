@@ -137,13 +137,12 @@ class App extends Component {
             }
 
             {this.state.isShowingLive &&
-            <div className="col-12 col-md-6 col-xl-4 mb-3">
+            <div className="col-12 col-md-6 col-xl-12 mb-3">
               <div className="row">
                 <div className="col-12">
                  <h3 className="text-center">
                     Kit
                     <input className="w-25 text-center mx-1" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
-                    Sensors
 
                     <div className="d-inline" onClick={() => this.toggleFavoriteDevice(this.state.selectedDevice)} >
                       {this.isFavoriteDevice(this.state.selectedDevice) ?
@@ -246,7 +245,6 @@ class App extends Component {
     localStorage.setItem('isShowingGraph', JSON.stringify(this.state.isShowingGraph))
     localStorage.setItem('isShowingWorldMap', JSON.stringify(this.state.isShowingWorldMap))
     localStorage.setItem('selectedDevice', JSON.stringify(this.state.selectedDevice))
-    console.log(localStorage);
   }
 
   addFavoriteDevice(deviceId){
@@ -265,8 +263,8 @@ class App extends Component {
   }
 
   isFavoriteDevice(deviceId){
-    if (this.state.favoriteDevices.indexOf(deviceId) > -1) {
-      //console.log('Device is favorite', deviceId)
+    if (this.state.favoriteDevices.includes(parseInt(deviceId))) {
+      console.log('Device is favorite', deviceId)
       return true;
     }
     return false;
@@ -274,7 +272,7 @@ class App extends Component {
 
   removeFavoriteDevice(deviceId){
     let newArr = this.state.favoriteDevices;
-    let index = newArr.indexOf(deviceId);
+    let index = newArr.indexOf(parseInt(deviceId));
 
     if (index > -1) {
       newArr.splice(index, 1);

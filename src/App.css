@@ -1,25 +1,24 @@
 
 body{
   font-family: 'Kanit', sans-serif;
+  background: #161719;
+  color: #e3e3e3;
 }
 
 .border{
-  border: 2px solid black !important;
+  border: 2px solid #e3e3e3 !important;
 }
 .sc-sensor-outer{
-  border: 1px solid white;
+  border: 4px solid #141a1c;
+  background: #212124;
 }
 .bg-black{
-  background-color: #2E2E2E;
+  background-color: #141a1c;
   color: white;
 }
 .bg-blue{
   background-color: #0019FF;
   color: white;
-}
-.bg-blue_light{
-  background-color: #65E3F4;
-  color: black;
 }
 .bg-green{
   background-color: #00E597;

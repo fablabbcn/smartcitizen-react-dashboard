@@ -7,7 +7,7 @@ class DeviceInfo extends Component{
     let kit = this.props.kit;
     let owner = this.props.owner;
     return(
-      <div className="row py-3 my-2 bg-blue_light">
+      <div className="row py-3 my-2">
         <div className="col-6">
           <KitInfo data={kit} />
         </div>
