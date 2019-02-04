@@ -220,12 +220,33 @@ class App extends Component {
     if(localStorage.favoriteDevices){
       this.setState({favoriteDevices: JSON.parse(localStorage.favoriteDevices)})
     }
+    if(localStorage.isShowingFavorites){
+      this.setState({isShowingFavorites: JSON.parse(localStorage.isShowingFavorites)})
+    }
+    if(localStorage.isShowingGraph){
+      this.setState({isShowingGraph: JSON.parse(localStorage.isShowingGraph)})
+    }
+    if(localStorage.isShowingLive){
+      this.setState({isShowingLive: JSON.parse(localStorage.isShowingLive)})
+    }
+    if(localStorage.isShowingWorldMap){
+      this.setState({isShowingWorldMap: JSON.parse(localStorage.isShowingWorldMap)})
+    }
+    if(localStorage.selectedDevice){
+      this.setState({selectedDevice: JSON.parse(localStorage.selectedDevice)})
+    }
     //this.getGeoLocation();
   }
   componentDidUpdate(prevProps, prevState){
     // After any prop or state change:
     // Save fave devices to a localStorage object, to survive reloads of the page
-    localStorage.favoriteDevices = JSON.stringify(this.state.favoriteDevices)
+    localStorage.setItem('favoriteDevices', JSON.stringify(this.state.favoriteDevices))
+    localStorage.setItem('isShowingFavorites', JSON.stringify(this.state.isShowingFavorites))
+    localStorage.setItem('isShowingLive', JSON.stringify(this.state.isShowingLive))
+    localStorage.setItem('isShowingGraph', JSON.stringify(this.state.isShowingGraph))
+    localStorage.setItem('isShowingWorldMap', JSON.stringify(this.state.isShowingWorldMap))
+    localStorage.setItem('selectedDevice', JSON.stringify(this.state.selectedDevice))
+    console.log(localStorage);
   }
 
   addFavoriteDevice(deviceId){
