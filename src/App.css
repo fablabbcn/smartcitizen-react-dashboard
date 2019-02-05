@@ -53,6 +53,17 @@ body{
   color: black;
 }
 
+.sc-nav-item{
+  opacity: 0.7;
+}
+.sc-nav-item:hover{
+  opacity: 1;
+}
 .nav-active{
+  color: black;
+}
+
+.table-white{
+  background: #eee;
   color: black;
 }

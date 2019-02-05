@@ -81,28 +81,30 @@ class App extends Component {
           <div className="row main">
             <div className="col-md-12 text-center sck-navbar fixed-top">
               <ul className="list-inline">
-                <li onClick={this.toggleShowFavorites} className={"list-inline-item " + (this.state.isShowingFavorites ? "bg-yellow" : "bg-grey")}>
+                <li onClick={this.toggleShowFavorites} className={"list-inline-item sc-nav-item " + (this.state.isShowingFavorites ? "bg-yellow" : "bg-grey")}>
                   <h3 className="m-2"> <FaStar /> </h3>
                 </li>
-                <li onClick={this.toggleShowWorldmap} className={"list-inline-item " + (this.state.isShowingWorldMap ? "bg-yellow" : "bg-grey")}>
+                <li onClick={this.toggleShowWorldmap} className={"list-inline-item sc-nav-item " + (this.state.isShowingWorldMap ? "bg-yellow" : "bg-grey")}>
                   <h3 className="m-2"> <FaGlobeAfrica /> </h3>
                 </li>
-                <li onClick={this.toggleShowLive} className={"list-inline-item " + (this.state.isShowingLive ? "bg-yellow" : "bg-grey")}>
+                <li onClick={this.toggleShowLive} className={"list-inline-item sc-nav-item " + (this.state.isShowingLive ? "bg-yellow" : "bg-grey")}>
                   <h3 className="m-2"> <FaGripVertical /> </h3>
                 </li>
-                <li onClick={this.toggleShowGraph} className={"list-inline-item " + (this.state.isShowingGraph ? "bg-yellow" : "bg-grey")}>
+                <li onClick={this.toggleShowGraph} className={"list-inline-item sc-nav-item " + (this.state.isShowingGraph ? "bg-yellow" : "bg-grey")}>
                   <h3 className="m-2"> <FaChartLine /> </h3>
                 </li>
               </ul>
             </div>
             <div className="col-12 empty" style={{height:'55px'}}>&nbsp;</div>
 
-            {(this.state.isShowingWorldMap || this.state.isShowingFavorites) &&
-              <div className="col-12 col-md-6 col-xl-4 mb-3 sck-router">
-                {this.state.isShowingFavorites &&
-                  <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
-                }
+            {this.state.isShowingFavorites &&
+              <div className="col-12 col-xl-3 mb-3 sck-router">
+                <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
+              </div>
+            }
 
+            {this.state.isShowingWorldMap &&
+              <div className="col-12 col-xl mb-3 sck-router">
                 {this.state.isShowingWorldMap &&
                   <div className="border p-2">
                     <ul className="list-inline">
@@ -137,7 +139,7 @@ class App extends Component {
             }
 
             {this.state.isShowingLive &&
-            <div className="col-12 col-md-6 col-xl-12 mb-3">
+            <div className="col-12 mb-3">
               <div className="row">
                 <div className="col-12">
                  <h3 className="text-center">
@@ -181,25 +183,23 @@ class App extends Component {
             }
 
             {this.state.isShowingGraph &&
-              <div className="col-12 col-md-6 col-xl-4 ">
-                <div className="btn btn-group">
-                  <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={() => this.adjustGraph('123456789')}>Last 24h</button>
-                  <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={() => this.adjustGraph('623456789')}>Last week</button>
-                  <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={() => this.adjustGraph('2523456789')}>Last month</button>
-                </div>
+              <div className="col-12 mb-5 pb-5">
                 <div className="row">
-                  <div className="col-6 ">
+                  <div className="col-12 col-xl-2">
+                    <div className="btn btn-group">
+                      <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={() => this.adjustGraph('123456789')}>Last 24h</button>
+                      <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={() => this.adjustGraph('623456789')}>Last week</button>
+                      <button className="btn btn-sm btn-outline-secondary d-block ml-auto" onClick={() => this.adjustGraph('2523456789')}>Last month</button>
+                    </div>
                     <span className="d-block"><FaCalendarAlt /> From:</span>
                     <DatePicker className="form-control " placeholderText="From" selected={this.state.selectedFromDate} onChange={this.changeFromDate} />
-                  </div>
-                  <div className="col-6 ">
                     <span className="d-block"><FaCalendarAlt /> To:</span>
                     <DatePicker className="form-control " placeholderText="From" selected={this.state.selectedToDate} onChange={this.changeToDate} />
                   </div>
-
+                  <div className="col-12 col-xl-10 ">
+                    <SckGraph data={this.state.theReading} />
+                  </div>
                 </div>
-
-                <SckGraph data={this.state.theReading} />
               </div>
             }
 

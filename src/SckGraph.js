@@ -26,10 +26,12 @@ class SckGraph extends Component{
           paper_bgcolor: '#212124',
           font: {
             color: '#e3e3e3',
+            family: 'Kanit',
           },
           autosize: true,
-          title: 'React - Plotly',
+          //title: 'React - Plotly',
           automargin: true,
+          margin:{ l: 30, r: 0, b: 30, t: 0, pad: 0 },
           responsive: true
         }}
       />

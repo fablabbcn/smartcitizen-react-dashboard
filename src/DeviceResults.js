@@ -37,9 +37,11 @@ class DeviceResults extends Component{
         <div className="col-12">
           <h3>Devices</h3>
           <ReactTable
-          data={item}
-          columns={columns}
-          minRows={1} />
+            data={item}
+            columns={columns}
+            minRows={1}
+            className={"table-white"}
+          />
         </div>
       </div>
     )

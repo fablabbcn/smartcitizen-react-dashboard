@@ -31,7 +31,7 @@ class WorldMapList extends Component{
     return(
       <div className="row">
         <div className="col-12">
-          <button className="btn bg-black m-1" onClick={this.props.getAll}>Get ALL Devices (slow)</button>
+          <button className="btn btn-outline-primary m-1" onClick={this.props.getAll}>Get ALL Devices (slow)</button>
 
           <ReactTable
             data={item}
