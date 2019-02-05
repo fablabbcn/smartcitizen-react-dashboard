@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import MiniPlot from "./MiniPlot.js"
 import {
   FaBatteryEmpty, FaBatteryFull, FaBatteryHalf, FaBatteryQuarter, FaBatteryThreeQuarters,
   FaCloud,
