@@ -56,7 +56,7 @@ class App extends Component {
     this.getDevicesByTag = this.getDevicesByTag.bind(this);
     this.getGeoLocation = this.getGeoLocation.bind(this);
     this.getReading = this.getReading.bind(this);
-    this.getSensorData = this.getSensorData.bind(this);
+    this.getDeviceInfo = this.getDeviceInfo.bind(this);
     this.getTags = this.getTags.bind(this);
     this.getWorldMap = this.getWorldMap.bind(this);
     this.isFavoriteDevice = this.isFavoriteDevice.bind(this);
@@ -79,7 +79,7 @@ class App extends Component {
       <div className="container-fluid">
         <Router>
           <div className="row main">
-            <div className="col-md-12 text-center sck-navbar fixed-top">
+            <div className="col-12 col-md-4 mx-auto text-center sck-navbar fixed-top">
               <ul className="list-inline">
                 <li onClick={this.toggleShowFavorites} className={"list-inline-item sc-nav-item " + (this.state.isShowingFavorites ? "bg-yellow" : "bg-grey")}>
                   <h3 className="m-2"> <FaStar /> </h3>
@@ -174,7 +174,15 @@ class App extends Component {
                 {
                   this.state.theSensors.map((item, key) => {
                     return(
-                      <KitSensors data={item} key={key} showDetails={this.state.isShowingSensorDetails} changeSelectedSensor={this.changeSelectedSensor}/>
+                      <KitSensors
+                        sensorinfo={item}
+                        key={'' + this.state.selectedDevice + key }
+                        from_date={(this.state.selectedFromDate).toISOString().slice(0,10)}
+                        to_date={(this.state.selectedToDate).toISOString().slice(0,10)}
+                        showDetails={this.state.isShowingSensorDetails}
+                        changeSelectedSensor={this.changeSelectedSensor}
+                        selectedDevice={this.state.selectedDevice}
+                      />
                     )
                   })
                 }
@@ -212,10 +220,7 @@ class App extends Component {
 
 
   componentDidMount(){
-    this.getSensorData();
-    this.getReading();
-    this.getTags();
-    // Add fav devices, if they exist in localstorage
+   // Add fav devices, if they exist in localstorage
     if(localStorage.favoriteDevices){
       this.setState({favoriteDevices: JSON.parse(localStorage.favoriteDevices)})
     }
@@ -231,10 +236,18 @@ class App extends Component {
     if(localStorage.isShowingWorldMap){
       this.setState({isShowingWorldMap: JSON.parse(localStorage.isShowingWorldMap)})
     }
+
     if(localStorage.selectedDevice){
-      this.setState({selectedDevice: JSON.parse(localStorage.selectedDevice)})
+      this.setState({selectedDevice: JSON.parse(localStorage.selectedDevice)}, () => {
+        // Make sure we have put the new selectedDevice into state, before getting data
+        this.getDeviceInfo();
+      })
+    }else{
+      this.getDeviceInfo();
     }
     //this.getGeoLocation();
+    this.getReading();
+    this.getTags();
   }
   componentDidUpdate(prevProps, prevState){
     // After any prop or state change:
@@ -263,8 +276,8 @@ class App extends Component {
   }
 
   isFavoriteDevice(deviceId){
-    if (this.state.favoriteDevices.includes(parseInt(deviceId))) {
-      console.log('Device is favorite', deviceId)
+    if(this.state.favoriteDevices.includes(parseInt(deviceId))) {
+      //console.log('Device is favorite', deviceId)
       return true;
     }
     return false;
@@ -292,15 +305,16 @@ class App extends Component {
   }
 
   changeSelectedDevice(id){
-    //console.log('changeSelectedDevice', id);
+    console.log('changeSelectedDevice to:', id);
     this.setState({selectedDevice: id}, () => {
-      this.getSensorData();
+      this.getDeviceInfo();
     });
   }
 
+  // Triggered on every key input in the Kit input field
   changeTargetIdInput(event){
     this.setState({selectedDevice: event.target.value}, () => {
-      this.getSensorData()
+      this.getDeviceInfo()
     })
   }
 
@@ -336,8 +350,9 @@ class App extends Component {
       })
   }
 
-  getSensorData(e){
-    console.log('getSensorData for selectedDevice...');
+  // Gets user info etc about device
+  getDeviceInfo(e){
+    console.log('getDeviceInfo for selectedDevice...', this.state.selectedDevice);
     return fetch('https://api.smartcitizen.me/v0/devices/' + this.state.selectedDevice)
       .then((response) =>  response.json())
       .then((responseJson) => {
@@ -347,6 +362,9 @@ class App extends Component {
           theData: responseJson.data,
           theSensors: responseJson.data.sensors,
           theKit: responseJson.kit,
+        }, () => {
+          // TODO: now it is safe to get the readings
+          //console.log('done');
         });
       }).catch(err => {
         console.log(err)
@@ -389,7 +407,9 @@ class App extends Component {
     this.getDevices(url)
   }
 
+  // Gets ONE reading for the selectedDevise and selectedSensor
   getReading(){
+    console.log('getReading (one) for dev:', this.state.selectedDevice, ' sens: ', this.state.selectedSensor);
     let from_date = (this.state.selectedFromDate).toISOString().slice(0,10);
     let to_date = (this.state.selectedToDate).toISOString().slice(0,10);
 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { FaGlobeAfrica, FaGripVertical, FaMap, FaRegStar, FaStar, FaChartLine } from 'react-icons/fa';
 class FavoriteDevices extends Component{
 
   render(){

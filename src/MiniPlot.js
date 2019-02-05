@@ -4,13 +4,10 @@ import Plot from 'react-plotly.js';
 class MiniPlot extends Component{
 
   render(){
-    let xxx = [];
-    let yyy = [];
-
     return(
       <Plot
         useResizeHandler
-        data={[ {type: 'scatter', x: xxx, y: yyy}, ]}
+        data={[ {type: 'scatter', x: this.props.x, y: this.props.y}, ]}
         style={{ width: '100%', height: '50%'}}
         layout={{
           plot_bgcolor: '#212124',
@@ -26,10 +23,9 @@ class MiniPlot extends Component{
           responsive: true
         }}
       />
-
     )
-
   }
+
 }
 
 export default MiniPlot
