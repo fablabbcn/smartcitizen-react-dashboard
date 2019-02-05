@@ -107,11 +107,13 @@ class KitSensors extends Component{
     // Without this delay, when changing between Favorite Devices,
     // it will try to query the API for the newly selected device,
     // but using the previous devices sensors-list (state.theSensors)
-    // resulting in many 500 errors
-    // We need to wait for theSensors to Populat in the 'getDeviceInfo'
+    // resulting in many 500 errors.
+    // We need to WAIT for theSensors to Populate in the 'getDeviceInfo'
+    //
+    //
     setTimeout(function(){
       that.getData();
-    }, 250);
+    }, 500);
 
     // Also get data every 60 seconds
     setInterval(function(){
