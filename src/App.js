@@ -237,7 +237,7 @@ class App extends Component {
       this.setState({isShowingWorldMap: JSON.parse(localStorage.isShowingWorldMap)})
     }
 
-    if(localStorage.selectedDevice){
+    if(localStorage.selectedDevice !== 'undefined'){
       this.setState({selectedDevice: JSON.parse(localStorage.selectedDevice)}, () => {
         // Make sure we have put the new selectedDevice into state, before getting data
         this.getDeviceInfo();
