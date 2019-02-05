@@ -23,7 +23,7 @@ class SckGraph extends Component{
         style={{ width: '100%'}}
         layout={{
           plot_bgcolor: '#161719',
-          paper_bgcolor: '#212124',
+          paper_bgcolor: '#161719',
           font: {
             color: '#e3e3e3',
             family: 'Kanit',
