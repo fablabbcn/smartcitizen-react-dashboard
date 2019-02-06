@@ -8,7 +8,7 @@ class MiniPlot extends Component{
       <Plot
         useResizeHandler
         data={[ {type: 'scatter', x: this.props.x, y: this.props.y}, ]}
-        style={{ width: '100%', height: '50%'}}
+        style={{ width: '100%', height: '30%'}}
         config={{
           // This hides the toolbar helper, which oddly always shows up on Raspberry Pi TV
           displayModeBar: false

@@ -133,7 +133,7 @@ class KitSensors extends Component{
     let yyy = [];
 
     let url = "https://api.smartcitizen.me/v0/devices/" + this.props.selectedDevice +
-      "/readings?sensor_id=" + this.props.sensorinfo.id + "&rollup=4h&from=" + from_date +
+      "/readings?sensor_id=" + this.props.sensorinfo.id + "&rollup=2h&from=" + from_date +
       "&to=" + to_date;
     return fetch(url)
       .then((response) => response.json())
@@ -160,7 +160,7 @@ class KitSensors extends Component{
              onClick={() => this.props.changeSelectedSensor(item['id'])} >
           <p className="m-2 text-center" style={{color: 'grey'}} >{item['description']}</p>
 
-          <div className="text-center mt-4 d-flex justify-content-center align-items-center">
+          <div className="text-center mt-3 d-flex justify-content-center align-items-center">
             <h5 className="">{this.getIcon(item['id'], item['value'])}</h5>
             <h1 className="mx-3">{Math.round(item['value'] * 100)/100}</h1>
             <h3 className=""> {item['unit']}</h3>
