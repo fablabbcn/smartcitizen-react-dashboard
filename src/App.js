@@ -142,11 +142,11 @@ class App extends Component {
 
             {this.state.isShowingLive &&
             <div className="col-12 mb-3">
-              <div className="row">
-                <div className="col-12">
-                 <h3 className="text-center">
+              <div className="row d-flex">
+                <div className="col-12 col-md-4">
+                  <h3 className="">
                     Kit
-                    <input className="w-25 text-center mx-1" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
+                    <input className="w-50 text-center mx-2" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
 
                     <div className="d-inline" onClick={() => this.toggleFavoriteDevice(this.state.selectedDevice)} >
                       {this.isFavoriteDevice(this.state.selectedDevice) ?
@@ -155,27 +155,29 @@ class App extends Component {
                       }
                     </div>
                   </h3>
-                  <div className="text-right">
-                    <p className="d-inline mr-2 m-0"><b>recorded_at:</b> {this.state.theData['recorded_at']}</p>
-                    <button className={"btn btn-sm m-1 " + (this.state.isShowingMiniPlot? "bg-grey" : "btn-outline-secondary")}
-                      onClick={this.toggleShowMiniPlot} > {this.state.isShowingMiniPlot ? 'Hide' : 'Show'} Sensor MiniPlot
-                    </button>
-                    <button className={"btn btn-sm m-1 " + (this.state.isShowingSensorDetails? "bg-grey" : "btn-outline-secondary")}
-                      onClick={this.toggleShowSensorDetails} > {this.state.isShowingSensorDetails ? 'Hide' : 'Show'} Sensor Details
-                    </button>
-                    <button className={"btn btn-sm m-1 " + (this.state.isShowingKitInfo? "bg-grey" : "btn-outline-secondary")}
-                      onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info
-                    </button>
-                  </div>
-                  {this.state.isShowingKitInfo &&
-                    <DeviceInfo kit={this.state.theKit} owner={this.state.owner} />
-                  }
-                  {!this.state.hasData &&
-                    <p className={"text-center m-0" + (this.state.hasData ? " bg-green" : " bg-red") }>
-                    {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.selectedDevice}
-                    </p>
-                  }
                 </div>
+                <div className="col-12 col-md ml-auto text-right">
+                  <p className="d-inline mr-2 m-0"><b>recorded_at:</b> {this.state.theData['recorded_at']}</p>
+                  <button className={"btn btn-sm m-1 " + (this.state.isShowingMiniPlot? "bg-grey" : "btn-outline-secondary")}
+                    onClick={this.toggleShowMiniPlot} > {this.state.isShowingMiniPlot ? 'Hide' : 'Show'} Sensor MiniPlot
+                  </button>
+                  <button className={"btn btn-sm m-1 " + (this.state.isShowingSensorDetails? "bg-grey" : "btn-outline-secondary")}
+                    onClick={this.toggleShowSensorDetails} > {this.state.isShowingSensorDetails ? 'Hide' : 'Show'} Sensor Details
+                  </button>
+                  <button className={"btn btn-sm m-1 " + (this.state.isShowingKitInfo? "bg-grey" : "btn-outline-secondary")}
+                    onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info
+                  </button>
+                </div>
+              </div>
+              {this.state.isShowingKitInfo &&
+                <DeviceInfo kit={this.state.theKit} owner={this.state.owner} />
+              }
+              {!this.state.hasData &&
+                <p className={"text-center m-0" + (this.state.hasData ? " bg-green" : " bg-red") }>
+                {this.state.hasData ? 'Showing data for device' : 'No Data found for device'} {this.state.selectedDevice}
+                </p>
+              }
+              <div className="row">
                 {
                   this.state.theSensors.map((item, key) => {
                     return(
