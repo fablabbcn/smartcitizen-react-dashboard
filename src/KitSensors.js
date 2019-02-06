@@ -73,13 +73,13 @@ class KitSensors extends Component{
     // humidity
     if (id === 5 || id === 13 || id === 56) { return <FaTint />; }
     if (id === 6 || id === 11 || id === 18) { return <FaSun />; }
-    if (id === 7)  {
+    if (id === 7 || id === 53)  {
       if (value <= 30) { return <FaVolumeDown />; }
       if (value > 30) { return <FaVolumeUp />; }
     }
     if (id === 8 || id === 9 || id === 21) { return <FaWifi />; }
     //Temp
-    if (id === 12 || id === 555) {
+    if (id === 12 || id === 55) {
       if (value <= 0) { return <FaThermometerEmpty />; }
       if (value > 0 && value <= 15) { return <FaThermometerQuarter />; }
       if (value > 15 && value <= 30) { return <FaThermometerHalf />; }
@@ -87,8 +87,10 @@ class KitSensors extends Component{
       if (value > 40) { return <FaThermometerFull />; }
     }
     if (id === 14) { return <FaLightbulb />; }
+
     if (id === 15) { return <FaFlask />; }
-    if (id === 16) { return <FaCloud />; }
+    //  Air Pollution ug/m3
+    if (id === 16 || id === 87 || id === 88 || id === 89) { return <FaCloud />};
     if (id === 17 || id === 10) {
       if (value <= 10) { return <FaBatteryEmpty />; }
       if (value > 10 && value <= 45) { return <FaBatteryQuarter />; }
