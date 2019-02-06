@@ -117,7 +117,7 @@ class KitSensors extends Component{
 
     // Also get data every 60 seconds
     setInterval(function(){
-      //that.getData();
+      that.getData();
     }, 60000);
   }
 
@@ -161,7 +161,7 @@ class KitSensors extends Component{
           }
           <div className="text-center my-3">
             <h1 className="">{Math.round(item['value'] * 100)/100}</h1>
-            <p className=""> {item['unit']}</p>
+            <h3 className=""> {item['unit']}</h3>
             <h4>{this.getIcon(item['id'], item['value'])}</h4>
           </div>
           {this.props.showDetails &&
@@ -169,7 +169,9 @@ class KitSensors extends Component{
           }
         </div>
 
-        <MiniPlot x={this.state.x} y={this.state.y} />
+        {this.props.showMiniPlot &&
+          <MiniPlot x={this.state.x} y={this.state.y} />
+        }
       </div>
     )
   }

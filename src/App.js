@@ -21,13 +21,14 @@ class App extends Component {
     this.state = {
       favoriteDevices: [],
       hasData: false,
-      isShowingDeviceList: true,
+      isShowingDeviceList: false,
       isShowingFavorites: false,
-      isShowingGraph: true,
+      isShowingGraph: false,
       isShowingKitInfo: false,
       isShowingLive: true,
+      isShowingMiniPlot: true,
       isShowingSensorDetails: false,
-      isShowingWorldMap: true,
+      isShowingWorldMap: false,
       owner: [],
       selectedDevice: 2440,
       selectedSensor: 7,
@@ -69,6 +70,7 @@ class App extends Component {
     this.toggleShowWorldmap = this.toggleShowWorldmap.bind(this);
     this.toggleShowLive = this.toggleShowLive.bind(this);
     this.toggleShowSensorDetails = this.toggleShowSensorDetails.bind(this);
+    this.toggleShowMiniPlot = this.toggleShowMiniPlot.bind(this);
 
   }
 
@@ -155,6 +157,9 @@ class App extends Component {
                   </h3>
                   <div className="text-right">
                     <p className="d-inline mr-2 m-0"><b>recorded_at:</b> {this.state.theData['recorded_at']}</p>
+                    <button className={"btn btn-sm m-1 " + (this.state.isShowingMiniPlot? "bg-grey" : "btn-outline-secondary")}
+                      onClick={this.toggleShowMiniPlot} > {this.state.isShowingMiniPlot ? 'Hide' : 'Show'} Sensor MiniPlot
+                    </button>
                     <button className={"btn btn-sm m-1 " + (this.state.isShowingSensorDetails? "bg-grey" : "btn-outline-secondary")}
                       onClick={this.toggleShowSensorDetails} > {this.state.isShowingSensorDetails ? 'Hide' : 'Show'} Sensor Details
                     </button>
@@ -180,6 +185,7 @@ class App extends Component {
                         from_date={(this.state.selectedFromDate).toISOString().slice(0,10)}
                         to_date={(this.state.selectedToDate).toISOString().slice(0,10)}
                         showDetails={this.state.isShowingSensorDetails}
+                        showMiniPlot={this.state.isShowingMiniPlot}
                         changeSelectedSensor={this.changeSelectedSensor}
                         selectedDevice={this.state.selectedDevice}
                       />
@@ -481,6 +487,10 @@ class App extends Component {
 
   toggleShowSensorDetails(){
     this.setState({isShowingSensorDetails: !this.state.isShowingSensorDetails})
+  }
+
+  toggleShowMiniPlot(){
+    this.setState({isShowingMiniPlot: !this.state.isShowingMiniPlot})
   }
 
 }
