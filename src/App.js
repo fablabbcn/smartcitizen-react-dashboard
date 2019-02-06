@@ -242,6 +242,9 @@ class App extends Component {
     if(localStorage.isShowingWorldMap){
       this.setState({isShowingWorldMap: JSON.parse(localStorage.isShowingWorldMap)})
     }
+    if(localStorage.isShowingMiniPlot){
+      this.setState({isShowingMiniPlot: JSON.parse(localStorage.isShowingMiniPlot)})
+    }
 
     if(localStorage.selectedDevice !== 'undefined'){
       this.setState({selectedDevice: JSON.parse(localStorage.selectedDevice)}, () => {
