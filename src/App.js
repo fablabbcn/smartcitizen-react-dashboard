@@ -248,7 +248,7 @@ class App extends Component {
       this.setState({isShowingMiniPlot: JSON.parse(localStorage.isShowingMiniPlot)})
     }
 
-    if(localStorage.selectedDevice !== 'undefined'){
+    if(localStorage.selectedDevice !== undefined){
       this.setState({selectedDevice: JSON.parse(localStorage.selectedDevice)}, () => {
         // Make sure we have put the new selectedDevice into state, before getting data
         this.getDeviceInfo();
