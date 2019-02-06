@@ -158,16 +158,18 @@ class KitSensors extends Component{
         <div style={{color: this.getBgColor(item['id'], item['value']) }}
              className="d-flex justify-content-between flex-column"
              onClick={() => this.props.changeSelectedSensor(item['id'])} >
-          {this.props.showDetails &&
-            <p className="m-2">{item['description']}</p>
-          }
-          <div className="text-center my-3">
-            <h1 className="">{Math.round(item['value'] * 100)/100}</h1>
+          <p className="m-2 text-center" style={{color: 'grey'}} >{item['description']}</p>
+
+          <div className="text-center mt-4 d-flex justify-content-center align-items-center">
+            <h5 className="">{this.getIcon(item['id'], item['value'])}</h5>
+            <h1 className="mx-3">{Math.round(item['value'] * 100)/100}</h1>
             <h3 className=""> {item['unit']}</h3>
-            <h4>{this.getIcon(item['id'], item['value'])}</h4>
           </div>
-          {this.props.showDetails &&
+          {this.props.showDetails ? (
             <p className="m-2 text-left">{item['name']} - id: { item['id'] }</p>
+          ):(
+            <div className="my-3"></div>
+          )
           }
         </div>
 

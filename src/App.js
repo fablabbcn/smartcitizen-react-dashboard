@@ -268,6 +268,7 @@ class App extends Component {
     localStorage.setItem('isShowingLive', JSON.stringify(this.state.isShowingLive))
     localStorage.setItem('isShowingGraph', JSON.stringify(this.state.isShowingGraph))
     localStorage.setItem('isShowingWorldMap', JSON.stringify(this.state.isShowingWorldMap))
+    localStorage.setItem('isShowingMiniPlot', JSON.stringify(this.state.isShowingMiniPlot))
     localStorage.setItem('selectedDevice', JSON.stringify(this.state.selectedDevice))
   }
 
