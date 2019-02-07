@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import scklogo from './scklogo.svg'
 import FavoriteDevices from './FavoriteDevices.js';
 import KitSensors from './KitSensors.js';
 import DeviceInfo from './DeviceInfo.js';
@@ -97,7 +98,7 @@ class App extends Component {
                 </li>
               </ul>
             </div>
-            <div className="col-12 empty" style={{height:'55px'}}>&nbsp;</div>
+            <img src={scklogo} style={{height: '40px', marginTop: '15px', marginLeft: '15px'}} />
 
             {this.state.isShowingFavorites &&
               <div className="col-12 col-xl-3 mb-3 sck-router">
