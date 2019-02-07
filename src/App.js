@@ -98,16 +98,18 @@ class App extends Component {
                 </li>
               </ul>
             </div>
-            <img src={scklogo} style={{height: '40px', marginTop: '15px', marginLeft: '15px'}} />
+            <div className="col-12 mt-2">
+              <img src={scklogo} style={{height: '40px'}} alt="logo" />
+            </div>
 
             {this.state.isShowingFavorites &&
-              <div className="col-12 col-xl-3 mb-3 sck-router">
+              <div className="col-12 col-xl-3 my-3 sck-router">
                 <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
               </div>
             }
 
             {this.state.isShowingWorldMap &&
-              <div className="col-12 col-xl mb-3 sck-router">
+              <div className="col-12 col-xl my-3 sck-router">
                 {this.state.isShowingWorldMap &&
                   <div className="border p-2">
                     <ul className="list-inline">
@@ -144,7 +146,7 @@ class App extends Component {
             {this.state.isShowingLive &&
             <div className="col-12 mb-3">
               <div className="row d-flex">
-                <div className="col-12 col-md-4">
+                <div className="col-12 col-md-4 text-center">
                   <h3 className="">
                     Kit
                     <input className="w-50 text-center mx-2" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
@@ -289,7 +291,7 @@ class App extends Component {
   }
 
   isFavoriteDevice(deviceId){
-    if(this.state.favoriteDevices.includes(parseInt(deviceId))) {
+    if(this.state.favoriteDevices.includes(parseInt(deviceId, 10))) {
       //console.log('Device is favorite', deviceId)
       return true;
     }
@@ -298,7 +300,7 @@ class App extends Component {
 
   removeFavoriteDevice(deviceId){
     let newArr = this.state.favoriteDevices;
-    let index = newArr.indexOf(parseInt(deviceId));
+    let index = newArr.indexOf(parseInt(deviceId, 10));
 
     if (index > -1) {
       newArr.splice(index, 1);
