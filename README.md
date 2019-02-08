@@ -1,4 +1,6 @@
-# Smart Citizen dashboard
+# Smart Citizen dashboard/monitor
+(We have not decided on a name yet!)
+
 
 A simple way to view your data. You visit the webpage and give it the ID of your Smart Citizen kit
 
