@@ -2,7 +2,7 @@
 
 A simple way to view your data. You visit the webpage and give it the ID of your Smart Citizen kit
 
-![Screenshot](2019-02-08_12-06-04.png)
+![Screenshot](public/2019-02-08_12-06-04.png)
 
 
 
