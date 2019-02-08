@@ -2,7 +2,7 @@
 (We have not decided on a name yet!)
 
 
-A simple way to view your data. You visit the webpage and give it the ID of your Smart Citizen kit
+A simple way to view your data. You visit the webpage and give it the ID of a Smart Citizen kit
 
 ![Screenshot](public/2019-02-08_12-06-04.png)
 
