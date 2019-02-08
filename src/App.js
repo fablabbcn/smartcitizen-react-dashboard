@@ -251,16 +251,18 @@ class App extends Component {
       this.setState({isShowingMiniPlot: JSON.parse(localStorage.isShowingMiniPlot)})
     }
 
-    if(localStorage.selectedDevice !== undefined){
+    // If last device had data (and not an incorrect device like '33FX'
+    if(localStorage.getItem("hasData") === 'true' ){
       this.setState({selectedDevice: JSON.parse(localStorage.selectedDevice)}, () => {
-        // Make sure we have put the new selectedDevice into state, before getting data
+        // Get info (like sensors list) AFTER selectedDevice is put into state
         this.getDeviceInfo();
       })
     }else{
+      // Using the default device 2440
       this.getDeviceInfo();
     }
     //this.getGeoLocation();
-    this.getReading();
+    //this.getReading();
     this.getTags();
   }
   componentDidUpdate(prevProps, prevState){
@@ -273,6 +275,7 @@ class App extends Component {
     localStorage.setItem('isShowingWorldMap', JSON.stringify(this.state.isShowingWorldMap))
     localStorage.setItem('isShowingMiniPlot', JSON.stringify(this.state.isShowingMiniPlot))
     localStorage.setItem('selectedDevice', JSON.stringify(this.state.selectedDevice))
+    localStorage.setItem('hasData', JSON.stringify(this.state.hasData))
   }
 
   addFavoriteDevice(deviceId){
@@ -386,10 +389,10 @@ class App extends Component {
         this.setState({
           hasData: false,
           // If we want to nullify data on errors
-          //owner: [],
-          //theData: [],
-          //theSensors: [],
-          //theKit: [],
+          owner: [],
+          theData: [],
+          theSensors: [],
+          theKit: [],
         })
       })
   }
@@ -422,7 +425,8 @@ class App extends Component {
     this.getDevices(url)
   }
 
-  // Gets ONE reading for the selectedDevise and selectedSensor
+  // Gets ONE reading for the selectedDevise and selectedSensor and
+  // saves it to state.theReading which is used by the BIG GRAPH <SckGraph>
   getReading(){
     console.log('getReading (one) for dev:', this.state.selectedDevice, ' sens: ', this.state.selectedSensor);
     let from_date = (this.state.selectedFromDate).toISOString().slice(0,10);
