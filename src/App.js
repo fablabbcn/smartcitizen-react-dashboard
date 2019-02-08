@@ -40,6 +40,7 @@ class App extends Component {
       theDevices: [],
       theKit: [],
       theReading: [],
+      theInterval: [],
       theSensors: [],
       theTags: [],
       userLat: [],
@@ -58,6 +59,7 @@ class App extends Component {
     this.getDevicesByTag = this.getDevicesByTag.bind(this);
     this.getGeoLocation = this.getGeoLocation.bind(this);
     this.getReading = this.getReading.bind(this);
+    this.getReadingsForAllSensors = this.getReadingsForAllSensors.bind(this);
     this.getDeviceInfo = this.getDeviceInfo.bind(this);
     this.getTags = this.getTags.bind(this);
     this.getWorldMap = this.getWorldMap.bind(this);
@@ -186,13 +188,12 @@ class App extends Component {
                     return(
                       <KitSensors
                         sensorinfo={item}
+                        x={item.x}
+                        y={item.y}
                         key={'' + this.state.selectedDevice + key }
-                        from_date={(this.state.selectedFromDate).toISOString().slice(0,10)}
-                        to_date={(this.state.selectedToDate).toISOString().slice(0,10)}
                         showDetails={this.state.isShowingSensorDetails}
                         showMiniPlot={this.state.isShowingMiniPlot}
                         changeSelectedSensor={this.changeSelectedSensor}
-                        selectedDevice={this.state.selectedDevice}
                       />
                     )
                   })
@@ -264,7 +265,19 @@ class App extends Component {
     //this.getGeoLocation();
     //this.getReading();
     this.getTags();
+
+    var that = this;
+
+    // Refresh Data + Graphs every X sec
+    this.theInterval = setInterval(function(){
+      that.getDeviceInfo();
+    }, 60000);
   }
+
+  componendWillUnmount(){
+    clearInterval(this.theInterval);
+  }
+
   componentDidUpdate(prevProps, prevState){
     // After any prop or state change:
     // Save fave devices to a localStorage object, to survive reloads of the page
@@ -329,7 +342,7 @@ class App extends Component {
     });
   }
 
-  // Triggered on every key input in the Kit input field
+  // Triggered on EVERY key input in the Kit input field
   changeTargetIdInput(event){
     this.setState({selectedDevice: event.target.value}, () => {
       this.getDeviceInfo()
@@ -382,8 +395,10 @@ class App extends Component {
           theKit: responseJson.kit,
         }, () => {
           // TODO: now it is safe to get the readings
-          //console.log('done');
+          //console.log('done, now get readings');
+          this.getReadingsForAllSensors();
         });
+
       }).catch(err => {
         console.log(err)
         this.setState({
@@ -425,7 +440,7 @@ class App extends Component {
     this.getDevices(url)
   }
 
-  // Gets ONE reading for the selectedDevise and selectedSensor and
+  // Gets ONE reading for the selectedDevice and selectedSensor and
   // saves it to state.theReading which is used by the BIG GRAPH <SckGraph>
   getReading(){
     console.log('getReading (one) for dev:', this.state.selectedDevice, ' sens: ', this.state.selectedSensor);
@@ -444,6 +459,46 @@ class App extends Component {
       }).catch(err => {
         console.log(err)
       })
+  }
+
+  getReadingsForAllSensors(){
+    console.log('get reading for ALL sensors, and jaming them into theSensors (without using state)');
+    let from_date = (this.state.selectedFromDate).toISOString().slice(0,10);
+    let to_date = (this.state.selectedToDate).toISOString().slice(0,10);
+
+    var device = this.state.selectedDevice;
+    var that = this;
+
+    this.state.theSensors.forEach(function(sensor){
+      let xxx = [];
+      let yyy = [];
+
+      let url = "https://api.smartcitizen.me/v0/devices/" + device +
+        "/readings?sensor_id=" + sensor.id + "&rollup=1h&from=" + from_date +
+        "&to=" + to_date;
+      return fetch(url)
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.readings) {
+            //console.log(responseJson.readings);
+            responseJson.readings.forEach(([x, y]) => {
+              xxx.push(x)
+              yyy.push(y)
+            })
+
+            // TODO: here we are not using the correct method of adding the arrays to state object
+            sensor.x = xxx;
+            sensor.y = yyy;
+            //that.setState({ theSensors: {x: xxx} })
+            that.setState(prevState => ({
+              //theSensors: [...prevState, xxx, yyy]
+            }))
+          }
+        }).catch(err => {
+          console.log( err)
+        })
+
+    })
 
   }
 

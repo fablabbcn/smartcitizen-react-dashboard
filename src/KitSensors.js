@@ -13,13 +13,6 @@ import {
   FaWifi } from 'react-icons/fa';
 
 class KitSensors extends Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      x:[],
-      y:[]
-    };
-  }
 
   getBgColor(id, value){
     //const ratio = value < 100 ? value/100 : 1;
@@ -101,56 +94,6 @@ class KitSensors extends Component{
     return <FaRegQuestionCircle />;
   }
 
-  componentDidMount(){
-    //console.log('comp mount sensor:', this.props.sensorinfo.id );
-    var that = this;
-
-    // TODO: remove this delay
-    // Without this delay, when changing between Favorite Devices,
-    // it will try to query the API for the newly selected device,
-    // but using the previous devices sensors-list (state.theSensors)
-    // resulting in many 500 errors.
-    // We need to WAIT for theSensors to Populate in the 'getDeviceInfo'
-    //
-    //
-    setTimeout(function(){
-      that.getData();
-    }, 500);
-
-    // Also get data every 60 seconds
-    setInterval(function(){
-      that.getData();
-    }, 60000);
-  }
-
-  getData(){
-    console.log('get reading for', this.props.selectedDevice, 'sensor:', this.props.sensorinfo.id);
-    //let from_date = "2019-02-03"
-    //let to_date = "2019-02-05"
-    let from_date = this.props.from_date
-    let to_date = this.props.to_date
-    let xxx = [];
-    let yyy = [];
-
-    let url = "https://api.smartcitizen.me/v0/devices/" + this.props.selectedDevice +
-      "/readings?sensor_id=" + this.props.sensorinfo.id + "&rollup=2h&from=" + from_date +
-      "&to=" + to_date;
-    return fetch(url)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.readings) {
-          responseJson.readings.forEach(([x, y]) => {
-            xxx.push(x)
-            yyy.push(y)
-          })
-          this.setState({ x: xxx, y: yyy})
-        }
-      }).catch(err => {
-        console.log( err)
-      })
-  }
-
-
   render(){
     let item = this.props.sensorinfo;
     return(
@@ -174,7 +117,7 @@ class KitSensors extends Component{
         </div>
 
         {this.props.showMiniPlot &&
-          <MiniPlot x={this.state.x} y={this.state.y} />
+          <MiniPlot x={this.props.x} y={this.props.y} />
         }
       </div>
     )
