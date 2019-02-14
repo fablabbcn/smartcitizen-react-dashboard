@@ -99,7 +99,7 @@ class App extends Component {
 
               <ul className="m-0 p-0 list-unstyled">
                 <li onClick={this.toggleShowFavorites} className={"" + (this.state.isShowingFavorites ? "bg-yellow" : "bg-grey")}>
-                  <h3 className="m-2"> <FaStar /> Favorite Devices </h3>
+                  <h5 className="m-2"> <FaStar /> Favorite Devices </h5>
                 </li>
               {this.state.isShowingFavorites &&
                 <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
@@ -107,11 +107,11 @@ class App extends Component {
 
 
                 <li onClick={this.toggleShowWorldmap} className={"" + (this.state.isShowingWorldMap ? "bg-yellow" : "bg-grey")}>
-                  <h3 className="m-2"> <FaGlobeAfrica /> World Map </h3>
+                  <h5 className="m-2"> <FaGlobeAfrica /> World Map </h5>
                 </li>
 
                 <li onClick={this.toggleShowLive} className={"" + (this.state.isShowingLive ? "bg-yellow" : "bg-grey")}>
-                  <h3 className="m-2"> <FaGripVertical /> Dashboard </h3>
+                  <h5 className="m-2"> <FaGripVertical /> Dashboard </h5>
                 </li>
 
                 {this.state.isShowingLive &&
@@ -146,7 +146,7 @@ class App extends Component {
                 }
 
                 <li onClick={this.toggleShowGraph} className={"" + (this.state.isShowingGraph ? "bg-yellow" : "bg-grey")}>
-                  <h3 className="m-2"> <FaChartLine /> Big Graph </h3>
+                  <h5 className="m-2"> <FaChartLine /> Big Graph </h5>
                 </li>
               </ul>
             </div>
