@@ -5,7 +5,7 @@ body{
   color: #e3e3e3;
 }
 
-h1{ font-size: 3.6vw; }
+h1{ font-size: 50px; }
 h2{ font-size: 40px; }
 h3{ font-size: 30px; }
 
@@ -57,6 +57,9 @@ h3{ font-size: 30px; }
   color: black;
 }
 
+.sc-navbar{
+  background: #212327;
+}
 .sc-nav-item{
   opacity: 0.7;
 }

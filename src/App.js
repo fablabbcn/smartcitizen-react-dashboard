@@ -28,6 +28,7 @@ class App extends Component {
       isShowingKitInfo: false,
       isShowingLive: true,
       isShowingMiniPlot: true,
+      isShowingMenu: false,
       isShowingSensorDetails: false,
       isShowingWorldMap: false,
       owner: [],
@@ -66,6 +67,7 @@ class App extends Component {
     this.isFavoriteDevice = this.isFavoriteDevice.bind(this);
     this.removeFavoriteDevice = this.removeFavoriteDevice.bind(this);
     this.toggleFavoriteDevice = this.toggleFavoriteDevice.bind(this);
+    this.toggleMenu = this.toggleMenu.bind(this);
     this.toggleShowDevices = this.toggleShowDevices.bind(this);
     this.toggleShowFavorites = this.toggleShowFavorites.bind(this);
     this.toggleShowGraph = this.toggleShowGraph.bind(this);
@@ -84,31 +86,72 @@ class App extends Component {
       <div className="container-fluid">
         <Router>
           <div className="row main">
-            <div className="col-12 col-md-4 mx-auto text-center sck-navbar fixed-top">
-              <ul className="list-inline">
-                <li onClick={this.toggleShowFavorites} className={"list-inline-item sc-nav-item " + (this.state.isShowingFavorites ? "bg-yellow" : "bg-grey")}>
-                  <h3 className="m-2"> <FaStar /> </h3>
+
+            <div className="col-12 mt-2">
+              <img onClick={this.toggleMenu} src={scklogo} style={{height: '40px'}} alt="logo" />
+            </div>
+
+            {this.state.isShowingMenu &&
+            <div className="col-10 col-sm-6 col-md-6 col-lg-4 col-xl-3 sc-navbar border-right border-bottom fixed-top">
+              <div className="mt-2">
+                <img onClick={this.toggleMenu} src={scklogo} style={{height: '40px'}} alt="logo" />
+              </div>
+
+              <ul className="m-0 p-0 list-unstyled">
+                <li onClick={this.toggleShowFavorites} className={"" + (this.state.isShowingFavorites ? "bg-yellow" : "bg-grey")}>
+                  <h3 className="m-2"> <FaStar /> Favorite Devices </h3>
                 </li>
-                <li onClick={this.toggleShowWorldmap} className={"list-inline-item sc-nav-item " + (this.state.isShowingWorldMap ? "bg-yellow" : "bg-grey")}>
-                  <h3 className="m-2"> <FaGlobeAfrica /> </h3>
+              {this.state.isShowingFavorites &&
+                <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
+              }
+
+
+                <li onClick={this.toggleShowWorldmap} className={"" + (this.state.isShowingWorldMap ? "bg-yellow" : "bg-grey")}>
+                  <h3 className="m-2"> <FaGlobeAfrica /> World Map </h3>
                 </li>
-                <li onClick={this.toggleShowLive} className={"list-inline-item sc-nav-item " + (this.state.isShowingLive ? "bg-yellow" : "bg-grey")}>
-                  <h3 className="m-2"> <FaGripVertical /> </h3>
+
+                <li onClick={this.toggleShowLive} className={"" + (this.state.isShowingLive ? "bg-yellow" : "bg-grey")}>
+                  <h3 className="m-2"> <FaGripVertical /> Dashboard </h3>
                 </li>
-                <li onClick={this.toggleShowGraph} className={"list-inline-item sc-nav-item " + (this.state.isShowingGraph ? "bg-yellow" : "bg-grey")}>
-                  <h3 className="m-2"> <FaChartLine /> </h3>
+
+                {this.state.isShowingLive &&
+                  <div>
+                    <h3 className="">
+                      Kit
+                      <input className="w-50 text-center mx-2" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
+
+                      <div className="d-inline" onClick={() => this.toggleFavoriteDevice(this.state.selectedDevice)} >
+                        {this.isFavoriteDevice(this.state.selectedDevice) ?
+                          <FaStar color={'orange'}/> :
+                          <FaRegStar/>
+                        }
+                      </div>
+                    </h3>
+
+                    <div className="form-check">
+                      <input className="form-check-input" id="check-sensor-details" type="checkbox" checked={this.state.isShowingSensorDetails} onChange={this.toggleShowSensorDetails} />
+                      <label className="form-check-label" htmlFor="check-sensor-details">Show Sensor details</label>
+                    </div>
+
+                    <div className="form-check">
+                      <input className="form-check-input" id="check-show-mini-plot" type="checkbox" checked={this.state.isShowingMiniPlot} onChange={this.toggleShowMiniPlot} />
+                      <label className="form-check-label" htmlFor="check-show-mini-plot">Show MiniPlot</label>
+                    </div>
+
+                    <div className="form-check">
+                      <input className="form-check-input" id="check-show-kit-info" type="checkbox" checked={this.state.isShowingKitInfo} onChange={this.toggleShowKitInfo} />
+                      <label className="form-check-label" htmlFor="check-show-kit-info">Show Kit info</label>
+                    </div>
+                  </div>
+                }
+
+                <li onClick={this.toggleShowGraph} className={"" + (this.state.isShowingGraph ? "bg-yellow" : "bg-grey")}>
+                  <h3 className="m-2"> <FaChartLine /> Big Graph </h3>
                 </li>
               </ul>
             </div>
-            <div className="col-12 mt-2">
-              <img src={scklogo} style={{height: '40px'}} alt="logo" />
-            </div>
-
-            {this.state.isShowingFavorites &&
-              <div className="col-12 col-xl-3 my-3 sck-router">
-                <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
-              </div>
             }
+
 
             {this.state.isShowingWorldMap &&
               <div className="col-12 col-xl my-3 sck-router">
@@ -148,30 +191,8 @@ class App extends Component {
             {this.state.isShowingLive &&
             <div className="col-12 mb-3">
               <div className="row d-flex">
-                <div className="col-12 col-md-4 text-center">
-                  <h3 className="">
-                    Kit
-                    <input className="w-50 text-center mx-2" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
-
-                    <div className="d-inline" onClick={() => this.toggleFavoriteDevice(this.state.selectedDevice)} >
-                      {this.isFavoriteDevice(this.state.selectedDevice) ?
-                        <FaStar color={'orange'}/> :
-                        <FaRegStar/>
-                      }
-                    </div>
-                  </h3>
-                </div>
-                <div className="col-12 col-md ml-auto text-right">
-                  <p className="d-inline mr-2 m-0"><b>recorded_at:</b> {this.state.theData['recorded_at']}</p>
-                  <button className={"btn btn-sm m-1 " + (this.state.isShowingMiniPlot? "bg-grey" : "btn-outline-secondary")}
-                    onClick={this.toggleShowMiniPlot} > {this.state.isShowingMiniPlot ? 'Hide' : 'Show'} Sensor MiniPlot
-                  </button>
-                  <button className={"btn btn-sm m-1 " + (this.state.isShowingSensorDetails? "bg-grey" : "btn-outline-secondary")}
-                    onClick={this.toggleShowSensorDetails} > {this.state.isShowingSensorDetails ? 'Hide' : 'Show'} Sensor Details
-                  </button>
-                  <button className={"btn btn-sm m-1 " + (this.state.isShowingKitInfo? "bg-grey" : "btn-outline-secondary")}
-                    onClick={this.toggleShowKitInfo} > {this.state.isShowingKitInfo ? 'Hide' : 'Show'} Kit & User Info
-                  </button>
+               <div className="col-12 col-md ml-auto text-right">
+                  <p className="d-inline mr-2 m-0">{this.state.theData['recorded_at']}</p>
                 </div>
               </div>
               {this.state.isShowingKitInfo &&
@@ -183,7 +204,7 @@ class App extends Component {
                 </p>
               }
               <div className="row">
-                {
+                {this.state.theSensors.length > 0 ? (
                   this.state.theSensors.map((item, key) => {
                     return(
                       <KitSensors
@@ -197,7 +218,9 @@ class App extends Component {
                       />
                     )
                   })
-                }
+                ) : (
+                  <div>Loading...</div>
+                )}
               </div>
             </div>
             }
@@ -527,6 +550,10 @@ class App extends Component {
     }else{
       this.addFavoriteDevice(deviceId);
     }
+  }
+
+  toggleMenu(){
+    this.setState({isShowingMenu: !this.state.isShowingMenu})
   }
 
   toggleShowDevices(){
