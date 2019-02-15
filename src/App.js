@@ -10,7 +10,7 @@ import SckGraph from './SckGraph.js';
 import Tags from './Tags.js';
 import WorldMap from './WorldMap.js';
 import WorldMapList from './WorldMapList.js';
-import { FaCalendarAlt, FaGlobeAfrica, FaGripVertical, FaRegStar, FaGlobe, FaList, FaStar,FaSearchLocation, FaTags, FaChartLine } from 'react-icons/fa';
+import { FaBars, FaCalendarAlt, FaGlobeAfrica, FaGripVertical, FaRegStar, FaGlobe, FaList, FaStar,FaSearchLocation, FaTags, FaTimes, FaChartLine } from 'react-icons/fa';
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -87,48 +87,56 @@ class App extends Component {
         <Router>
           <div className="row main">
 
-            <div className="col-12 mt-2">
-              <img onClick={this.toggleMenu} src={scklogo} style={{height: '40px'}} alt="logo" />
+            <div className="col-12 mt-2 d-flex justify-content-between align-items-center" onClick={this.toggleMenu}>
+              <FaBars size={32} />
+              <img src={scklogo} style={{height: '40px'}} alt="logo" />
             </div>
 
             {this.state.isShowingMenu &&
             <div className="col-10 col-sm-6 col-md-6 col-lg-4 col-xl-3 sc-navbar border-right border-bottom fixed-top">
-              <div className="mt-2">
-                <img onClick={this.toggleMenu} src={scklogo} style={{height: '40px'}} alt="logo" />
+              <div onClick={this.toggleMenu} className="my-3">
+                <FaTimes size={32} />
               </div>
+              <h3 className="text-center">
+                Kit
+                <input
+                  className="w-50 text-center mx-2 p-0"
+                  style={{border:"none", borderRadius: "30px" }}
+                  type="text" onChange={this.changeTargetIdInput}
+                  value={this.state.selectedDevice}
+                />
+
+                <div className="d-inline" onClick={() => this.toggleFavoriteDevice(this.state.selectedDevice)} >
+                  {this.isFavoriteDevice(this.state.selectedDevice) ?
+                    <FaStar color={'orange'}/> :
+                    <FaRegStar/>
+                  }
+                </div>
+              </h3>
 
               <ul className="m-0 p-0 list-unstyled">
-                <li onClick={this.toggleShowFavorites} className={"" + (this.state.isShowingFavorites ? "bg-yellow" : "bg-grey")}>
-                  <h5 className="m-2"> <FaStar /> Favorite Devices </h5>
+                <li onClick={this.toggleShowFavorites} className={"mt-1 " + (this.state.isShowingFavorites ? "bg-grey" : "")}>
+                  <h5 className="p-2"> <FaStar /> Favorite Devices </h5>
                 </li>
-              {this.state.isShowingFavorites &&
-                <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
-              }
-
-
-                <li onClick={this.toggleShowWorldmap} className={"" + (this.state.isShowingWorldMap ? "bg-yellow" : "bg-grey")}>
-                  <h5 className="m-2"> <FaGlobeAfrica /> World Map </h5>
+                {this.state.isShowingFavorites &&
+                  <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
+                }
+                <li onClick={this.toggleShowWorldmap} className={"mt-1 " + (this.state.isShowingWorldMap ? "bg-grey" : "")}>
+                  <h5 className="p-2"> <FaGlobeAfrica /> World Map </h5>
                 </li>
 
-                <li onClick={this.toggleShowLive} className={"" + (this.state.isShowingLive ? "bg-yellow" : "bg-grey")}>
-                  <h5 className="m-2"> <FaGripVertical /> Dashboard </h5>
+                <li onClick={this.toggleShowLive} className={"mt-1 " + (this.state.isShowingLive ? "bg-grey" : "")}>
+                  <h5 className="p-2"> <FaGripVertical /> Dashboard </h5>
                 </li>
 
                 {this.state.isShowingLive &&
-                  <div>
-                    <h3 className="">
-                      Kit
-                      <input className="w-50 text-center mx-2" type="text" onChange={this.changeTargetIdInput} value={this.state.selectedDevice}/>
-
-                      <div className="d-inline" onClick={() => this.toggleFavoriteDevice(this.state.selectedDevice)} >
-                        {this.isFavoriteDevice(this.state.selectedDevice) ?
-                          <FaStar color={'orange'}/> :
-                          <FaRegStar/>
-                        }
-                      </div>
-                    </h3>
-
+                  <div className="p-3">
                     <div className="form-check">
+                      <input className="form-check-input" id="check-show-kit-info" type="checkbox" checked={this.state.isShowingKitInfo} onChange={this.toggleShowKitInfo} />
+                      <label className="form-check-label" htmlFor="check-show-kit-info">Show Kit info</label>
+                    </div>
+
+                     <div className="form-check">
                       <input className="form-check-input" id="check-sensor-details" type="checkbox" checked={this.state.isShowingSensorDetails} onChange={this.toggleShowSensorDetails} />
                       <label className="form-check-label" htmlFor="check-sensor-details">Show Sensor details</label>
                     </div>
@@ -137,16 +145,11 @@ class App extends Component {
                       <input className="form-check-input" id="check-show-mini-plot" type="checkbox" checked={this.state.isShowingMiniPlot} onChange={this.toggleShowMiniPlot} />
                       <label className="form-check-label" htmlFor="check-show-mini-plot">Show MiniPlot</label>
                     </div>
-
-                    <div className="form-check">
-                      <input className="form-check-input" id="check-show-kit-info" type="checkbox" checked={this.state.isShowingKitInfo} onChange={this.toggleShowKitInfo} />
-                      <label className="form-check-label" htmlFor="check-show-kit-info">Show Kit info</label>
-                    </div>
-                  </div>
+                 </div>
                 }
 
-                <li onClick={this.toggleShowGraph} className={"" + (this.state.isShowingGraph ? "bg-yellow" : "bg-grey")}>
-                  <h5 className="m-2"> <FaChartLine /> Big Graph </h5>
+                <li onClick={this.toggleShowGraph} className={"my-1 " + (this.state.isShowingGraph ? "bg-grey" : "")}>
+                  <h5 className="p-2"> <FaChartLine /> Big Graph </h5>
                 </li>
               </ul>
             </div>
