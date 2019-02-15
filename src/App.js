@@ -10,7 +10,7 @@ import SckGraph from './SckGraph.js';
 import Tags from './Tags.js';
 import WorldMap from './WorldMap.js';
 import WorldMapList from './WorldMapList.js';
-import { FaBars, FaCalendarAlt, FaGlobeAfrica, FaGripVertical, FaRegStar, FaGlobe, FaList, FaStar,FaSearchLocation, FaTags, FaTimes, FaChartLine } from 'react-icons/fa';
+import { FaBars, FaCaretDown, FaCalendarAlt, FaGlobeAfrica, FaGripVertical, FaRegStar, FaGlobe, FaList, FaStar,FaSearchLocation, FaTags, FaTimes, FaChartLine } from 'react-icons/fa';
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -116,7 +116,7 @@ class App extends Component {
 
               <ul className="m-0 p-0 list-unstyled">
                 <li onClick={this.toggleShowFavorites} className={"mt-1 " + (this.state.isShowingFavorites ? "bg-grey" : "")}>
-                  <h5 className="p-2"> <FaStar /> Favorite Devices </h5>
+                  <h5 className="p-2"> <FaStar /> Favorite Devices <FaCaretDown/> </h5>
                 </li>
                 {this.state.isShowingFavorites &&
                   <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
@@ -126,7 +126,7 @@ class App extends Component {
                 </li>
 
                 <li onClick={this.toggleShowLive} className={"mt-1 " + (this.state.isShowingLive ? "bg-grey" : "")}>
-                  <h5 className="p-2"> <FaGripVertical /> Dashboard </h5>
+                  <h5 className="p-2"> <FaGripVertical /> Dashboard <FaCaretDown/> </h5>
                 </li>
 
                 {this.state.isShowingLive &&
