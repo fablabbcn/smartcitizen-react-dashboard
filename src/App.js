@@ -30,6 +30,7 @@ class App extends Component {
       isShowingMiniPlot: true,
       isShowingMenu: false,
       isShowingSensorDetails: false,
+      isShowingSensorName: true,
       isFindingDevices: false,
       owner: [],
       selectedDevice: 2440,
@@ -75,6 +76,7 @@ class App extends Component {
     this.toggleFindDevices = this.toggleFindDevices.bind(this);
     this.toggleShowLive = this.toggleShowLive.bind(this);
     this.toggleShowSensorDetails = this.toggleShowSensorDetails.bind(this);
+    this.toggleShowSensorName = this.toggleShowSensorName.bind(this);
     this.toggleShowMiniPlot = this.toggleShowMiniPlot.bind(this);
 
   }
@@ -136,9 +138,14 @@ class App extends Component {
                       <label className="form-check-label" htmlFor="check-show-kit-info">Show Kit info</label>
                     </div>
 
-                     <div className="form-check">
+                    <div className="form-check">
+                      <input className="form-check-input" id="check-sensor-name" type="checkbox" checked={this.state.isShowingSensorName} onChange={this.toggleShowSensorName} />
+                      <label className="form-check-label" htmlFor="check-sensor-name">Show Sensor name</label>
+                    </div>
+
+                    <div className="form-check">
                       <input className="form-check-input" id="check-sensor-details" type="checkbox" checked={this.state.isShowingSensorDetails} onChange={this.toggleShowSensorDetails} />
-                      <label className="form-check-label" htmlFor="check-sensor-details">Show Sensor details</label>
+                      <label className="form-check-label" htmlFor="check-sensor-details">Show Sensor type + id</label>
                     </div>
 
                     <div className="form-check">
@@ -212,14 +219,15 @@ class App extends Component {
                   this.state.theSensors.map((item, key) => {
                     return(
                       <KitSensors
-                        sensorinfo={item}
-                        x={item.x}
-                        y={item.y}
+                        changeSelectedSensor={this.changeSelectedSensor}
                         key={'' + this.state.selectedDevice + key }
+                        selectedSensor={this.state.selectedSensor}
+                        sensorinfo={item}
                         showDetails={this.state.isShowingSensorDetails}
                         showMiniPlot={this.state.isShowingMiniPlot}
-                        changeSelectedSensor={this.changeSelectedSensor}
-                        selectedSensor={this.state.selectedSensor}
+                        showName={this.state.isShowingSensorName}
+                        x={item.x}
+                        y={item.y}
                       />
                     )
                   })
@@ -592,6 +600,10 @@ class App extends Component {
 
   toggleShowSensorDetails(){
     this.setState({isShowingSensorDetails: !this.state.isShowingSensorDetails})
+  }
+
+  toggleShowSensorName(){
+    this.setState({isShowingSensorName: !this.state.isShowingSensorName})
   }
 
   toggleShowMiniPlot(){
