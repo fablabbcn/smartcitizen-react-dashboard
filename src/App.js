@@ -169,7 +169,7 @@ class App extends Component {
                       <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/tags"><FaTags /> Tags</NavLink> </li>
                     </ul>
 
-                    <p>(React Router - This is a work in progress!)</p>
+                    <p>(This is still a work in progress!)</p>
                     <Route path="/map"      render={() => <WorldMap />}/>
                     <Route path="/maplist"  render={() => <WorldMapList
                       data={this.state.world_map}
@@ -197,7 +197,7 @@ class App extends Component {
             <div className="col-12 mb-3">
               <div className="row d-flex">
                <div className="col-12 col-md ml-auto text-right">
-                  <p className="d-inline mr-2 m-0">{this.state.theData['recorded_at']}</p>
+                  <p className="d-inline mr-2 m-0">ID: {this.state.selectedDevice} - {this.state.theData['recorded_at']}</p>
                 </div>
               </div>
               {this.state.isShowingKitInfo &&
@@ -225,7 +225,11 @@ class App extends Component {
                     )
                   })
                 ) : (
-                  <div>Loading...</div>
+                  <div className="col-12 text-center my-5">
+                    <div className="spinner-border text-success" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
@@ -254,8 +258,8 @@ class App extends Component {
 
             {/* end row */}
           </div>
-      </div>
-        </Router>
+        </div>
+      </Router>
     );
   }
 
