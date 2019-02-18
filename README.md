@@ -1,6 +1,6 @@
-# Smart Citizen dashboard/monitor
-(We have not decided on a name yet!)
+# Smart Citizen dashboard
 
+Run your own dashboard on a Raspberry Pie connected to a TV.
 
 A simple way to view your data. You visit the webpage and give it the ID of a Smart Citizen kit
 
