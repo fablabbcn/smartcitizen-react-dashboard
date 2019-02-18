@@ -218,6 +218,7 @@ class App extends Component {
                         showDetails={this.state.isShowingSensorDetails}
                         showMiniPlot={this.state.isShowingMiniPlot}
                         changeSelectedSensor={this.changeSelectedSensor}
+                        selectedSensor={this.state.selectedSensor}
                       />
                     )
                   })

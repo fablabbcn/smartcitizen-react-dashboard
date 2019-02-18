@@ -97,7 +97,8 @@ class KitSensors extends Component{
   render(){
     let item = this.props.sensorinfo;
     return(
-      <div key={item['id']} className="p-0 m-0 col-6 col-md-4 col-xl-3 sc-sensor-outer" >
+      <div key={item['id']}
+        className={"p-0 m-0 col-6 col-md-4 col-xl-3 sc-sensor-outer " + (this.props.selectedSensor === item['id'] ? "selected-sensor" : "" )}>
         <div style={{color: this.getBgColor(item['id'], item['value']) }}
              className="d-flex justify-content-between flex-column"
              onClick={() => this.props.changeSelectedSensor(item['id'])} >
