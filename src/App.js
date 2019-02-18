@@ -83,21 +83,21 @@ class App extends Component {
 
     return (
 
-      <div className="container-fluid">
-        <Router>
-          <div className="row main">
+      <Router>
+        <div className="container-fluid">
+          <div className="row">
 
             <div className="col-12 mt-2 d-flex justify-content-between align-items-center" onClick={this.toggleMenu}>
-              <FaBars size={32} />
               <img src={scklogo} style={{height: '40px'}} alt="logo" />
+              <FaBars size={32} />
             </div>
 
             {this.state.isShowingMenu &&
-            <div className="col-10 col-sm-6 col-md-6 col-lg-4 col-xl-3 sc-navbar border-right border-bottom fixed-top">
-              <div onClick={this.toggleMenu} className="my-3">
+            <div className="col-10 col-sm-6 col-md-6 col-lg-4 col-xl-3 sc-navbar border-left border-bottom fixed-top ml-auto pb-5">
+              <div onClick={this.toggleMenu} className="my-2 text-right">
                 <FaTimes size={32} />
               </div>
-              <h3 className="text-center">
+              <h3 className="text-center my-4">
                 Kit
                 <input
                   className="w-50 text-center mx-2 p-0"
@@ -115,17 +115,17 @@ class App extends Component {
               </h3>
 
               <ul className="m-0 p-0 list-unstyled">
-                <li onClick={this.toggleShowFavorites} className={"mt-1 " + (this.state.isShowingFavorites ? "bg-grey" : "")}>
+                <li onClick={this.toggleShowFavorites} className={"mt-1 " + (this.state.isShowingFavorites ? "nav-active" : "")}>
                   <h5 className="p-2"> <FaStar /> Favorite Devices <FaCaretDown/> </h5>
                 </li>
                 {this.state.isShowingFavorites &&
                   <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
                 }
-                <li onClick={this.toggleShowWorldmap} className={"mt-1 " + (this.state.isShowingWorldMap ? "bg-grey" : "")}>
+                <li onClick={this.toggleShowWorldmap} className={"mt-1 " + (this.state.isShowingWorldMap ? "nav-active" : "")}>
                   <h5 className="p-2"> <FaGlobeAfrica /> World Map </h5>
                 </li>
 
-                <li onClick={this.toggleShowLive} className={"mt-1 " + (this.state.isShowingLive ? "bg-grey" : "")}>
+                <li onClick={this.toggleShowLive} className={"mt-1 " + (this.state.isShowingLive ? "nav-active" : "")}>
                   <h5 className="p-2"> <FaGripVertical /> Dashboard <FaCaretDown/> </h5>
                 </li>
 
@@ -148,13 +148,15 @@ class App extends Component {
                  </div>
                 }
 
-                <li onClick={this.toggleShowGraph} className={"my-1 " + (this.state.isShowingGraph ? "bg-grey" : "")}>
+                <li onClick={this.toggleShowGraph} className={"my-1 " + (this.state.isShowingGraph ? "nav-active" : "")}>
                   <h5 className="p-2"> <FaChartLine /> Big Graph </h5>
                 </li>
               </ul>
             </div>
             }
 
+          </div>
+          <div className="row main">
 
             {this.state.isShowingWorldMap &&
               <div className="col-12 col-xl my-3 sck-router">
@@ -252,8 +254,8 @@ class App extends Component {
 
             {/* end row */}
           </div>
-        </Router>
       </div>
+        </Router>
     );
   }
 

@@ -9,6 +9,12 @@ h1{ font-size: 50px; }
 h2{ font-size: 40px; }
 h3{ font-size: 30px; }
 
+@media (max-width: 576px) { 
+  h1{ font-size: 30px !important; }
+  h2{ font-size: 24px; }
+  h3{ font-size: 20px; }
+}
+
 .border{
   border: 2px solid #e3e3e3 !important;
 }
@@ -67,12 +73,13 @@ h3{ font-size: 30px; }
   opacity: 1;
 }
 .nav-active{
-  color: black;
+  color: orange;
 }
 
 .table-white{
   background: #eee;
   color: black;
 }
-.selected-sensor{
+
+.sc-selected-sensor{
 }
