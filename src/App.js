@@ -30,7 +30,7 @@ class App extends Component {
       isShowingMiniPlot: true,
       isShowingMenu: false,
       isShowingSensorDetails: false,
-      isShowingWorldMap: false,
+      isFindingDevices: false,
       owner: [],
       selectedDevice: 2440,
       selectedSensor: 7,
@@ -72,7 +72,7 @@ class App extends Component {
     this.toggleShowFavorites = this.toggleShowFavorites.bind(this);
     this.toggleShowGraph = this.toggleShowGraph.bind(this);
     this.toggleShowKitInfo = this.toggleShowKitInfo.bind(this);
-    this.toggleShowWorldmap = this.toggleShowWorldmap.bind(this);
+    this.toggleFindDevices = this.toggleFindDevices.bind(this);
     this.toggleShowLive = this.toggleShowLive.bind(this);
     this.toggleShowSensorDetails = this.toggleShowSensorDetails.bind(this);
     this.toggleShowMiniPlot = this.toggleShowMiniPlot.bind(this);
@@ -93,7 +93,7 @@ class App extends Component {
             </div>
 
             {this.state.isShowingMenu &&
-            <div className="col-10 col-sm-6 col-md-6 col-lg-4 col-xl-3 sc-navbar border-left border-bottom fixed-top ml-auto pb-5">
+            <div className="col-10 col-sm-6 col-md-5 col-lg-4 col-xl-3 sc-navbar border-left border-bottom fixed-top ml-auto pb-5">
               <div onClick={this.toggleMenu} className="my-2 text-right">
                 <FaTimes size={32} />
               </div>
@@ -116,13 +116,13 @@ class App extends Component {
 
               <ul className="m-0 p-0 list-unstyled">
                 <li onClick={this.toggleShowFavorites} className={"mt-1 " + (this.state.isShowingFavorites ? "nav-active" : "")}>
-                  <h5 className="p-2"> <FaStar /> Favorite Devices <FaCaretDown/> </h5>
+                  <h5 className="p-2"> <FaStar /> Favorite Devices <small>({this.state.favoriteDevices.length}) </small> <FaCaretDown/> </h5>
                 </li>
                 {this.state.isShowingFavorites &&
                   <FavoriteDevices devices={this.state.favoriteDevices} changeSelectedDevice={this.changeSelectedDevice}/>
                 }
-                <li onClick={this.toggleShowWorldmap} className={"mt-1 " + (this.state.isShowingWorldMap ? "nav-active" : "")}>
-                  <h5 className="p-2"> <FaGlobeAfrica /> World Map </h5>
+                <li onClick={this.toggleFindDevices} className={"mt-1 " + (this.state.isFindingDevices ? "nav-active" : "")}>
+                  <h5 className="p-2"> <FaGlobeAfrica /> Find Device </h5>
                 </li>
 
                 <li onClick={this.toggleShowLive} className={"mt-1 " + (this.state.isShowingLive ? "nav-active" : "")}>
@@ -158,10 +158,10 @@ class App extends Component {
           </div>
           <div className="row main">
 
-            {this.state.isShowingWorldMap &&
-              <div className="col-12 col-xl my-3 sck-router">
-                {this.state.isShowingWorldMap &&
+            {this.state.isFindingDevices &&
+                <div className="col-12 col-xl my-3 sck-router">
                   <div className="border p-2">
+                    <h3>Find Devices:</h3>
                     <ul className="list-inline">
                       <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/nearby"><FaSearchLocation /> Nearby</NavLink> </li>
                       <li className="list-inline-item"> <NavLink activeClassName="nav-active" to="/map"><FaGlobe /> WorldMap</NavLink> </li>
@@ -172,25 +172,24 @@ class App extends Component {
                     <p>(This is still a work in progress!)</p>
                     <Route path="/map"      render={() => <WorldMap />}/>
                     <Route path="/maplist"  render={() => <WorldMapList
-                      data={this.state.world_map}
-                      changeSelectedDevice={this.changeSelectedDevice}
-                      getAll={this.getWorldMap} /> } />
+                        data={this.state.world_map}
+                        changeSelectedDevice={this.changeSelectedDevice}
+                        getAll={this.getWorldMap} /> } />
                     <Route path="/nearby"   render={() => <NearDevices
-                      data={this.state.theDevices}
-                      getAll={this.getGeoLocation}
-                      changeSelectedDevice={this.changeSelectedDevice}
-                      userLat={this.state.userLat}
-                      userLong={this.state.userLong} /> } />
+                        data={this.state.theDevices}
+                        getAll={this.getGeoLocation}
+                        changeSelectedDevice={this.changeSelectedDevice}
+                        userLat={this.state.userLat}
+                        userLong={this.state.userLong} /> } />
                     <Route path="/tags"     render={() => <Tags devices={this.state.theDevices}
-                      getDevicesByTag={this.getDevicesByTag}
-                      tags={this.state.theTags}
-                      getTags={this.getTags}
-                      changeTag={this.changeTag}
-                      changeSelectedDevice={this.changeSelectedDevice}
-                      selectedTag={this.state.selectedTag} /> } />
+                        getDevicesByTag={this.getDevicesByTag}
+                        tags={this.state.theTags}
+                        getTags={this.getTags}
+                        changeTag={this.changeTag}
+                        changeSelectedDevice={this.changeSelectedDevice}
+                        selectedTag={this.state.selectedTag} /> } />
                   </div>
-                }
-              </div>
+                </div>
             }
 
             {this.state.isShowingLive &&
@@ -278,8 +277,8 @@ class App extends Component {
     if(localStorage.isShowingLive){
       this.setState({isShowingLive: JSON.parse(localStorage.isShowingLive)})
     }
-    if(localStorage.isShowingWorldMap){
-      this.setState({isShowingWorldMap: JSON.parse(localStorage.isShowingWorldMap)})
+    if(localStorage.isFindingDevices){
+      this.setState({isFindingDevices: JSON.parse(localStorage.isFindingDevices)})
     }
     if(localStorage.isShowingMiniPlot){
       this.setState({isShowingMiniPlot: JSON.parse(localStorage.isShowingMiniPlot)})
@@ -318,7 +317,7 @@ class App extends Component {
     localStorage.setItem('isShowingFavorites', JSON.stringify(this.state.isShowingFavorites))
     localStorage.setItem('isShowingLive', JSON.stringify(this.state.isShowingLive))
     localStorage.setItem('isShowingGraph', JSON.stringify(this.state.isShowingGraph))
-    localStorage.setItem('isShowingWorldMap', JSON.stringify(this.state.isShowingWorldMap))
+    localStorage.setItem('isFindingDevices', JSON.stringify(this.state.isFindingDevices))
     localStorage.setItem('isShowingMiniPlot', JSON.stringify(this.state.isShowingMiniPlot))
     localStorage.setItem('selectedDevice', JSON.stringify(this.state.selectedDevice))
     localStorage.setItem('hasData', JSON.stringify(this.state.hasData))
@@ -574,8 +573,8 @@ class App extends Component {
     this.setState({isShowingKitInfo: !this.state.isShowingKitInfo})
   }
 
-  toggleShowWorldmap(){
-    this.setState({isShowingWorldMap: !this.state.isShowingWorldMap})
+  toggleFindDevices(){
+    this.setState({isFindingDevices: !this.state.isFindingDevices})
   }
 
   toggleShowFavorites(){
