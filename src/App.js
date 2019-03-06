@@ -216,7 +216,9 @@ class App extends Component {
               }
               <div className="row">
                 {this.state.theSensors.length > 0 ? (
-                  this.state.theSensors.map((item, key) => {
+                  // TODO: remove, and implement this on the API instead (remove id 15,16)
+                  // We manually filter ids 15,16 which are not in use
+                  this.state.theSensors.filter(x => (x.id !== 16) && ( x.id !== 15)).map((item, key) => {
                     return(
                       <KitSensors
                         changeSelectedSensor={this.changeSelectedSensor}
@@ -489,7 +491,7 @@ class App extends Component {
     let to_date = (this.state.selectedToDate).toISOString().slice(0,10);
 
     let url = "https://api.smartcitizen.me/v0/devices/" + this.state.selectedDevice +
-      "/readings?sensor_id=" + this.state.selectedSensor + "&rollup=4h&from=" + from_date +
+      "/readings?sensor_id=" + this.state.selectedSensor + "&rollup=15m&from=" + from_date +
       "&to=" + to_date;
     return fetch(url)
       .then((response) => response.json())
@@ -515,7 +517,7 @@ class App extends Component {
       let yyy = [];
 
       let url = "https://api.smartcitizen.me/v0/devices/" + device +
-        "/readings?sensor_id=" + sensor.id + "&rollup=1h&from=" + from_date +
+        "/readings?sensor_id=" + sensor.id + "&rollup=15m&from=" + from_date +
         "&to=" + to_date;
       return fetch(url)
         .then((response) => response.json())
