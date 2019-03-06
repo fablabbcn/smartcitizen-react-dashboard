@@ -23,7 +23,7 @@ class MiniPlot extends Component{
           autosize: true,
           //title: 'React - Plotly',
           automargin: true,
-          margin:{ l: 0, r: 0, b: 0, t: 0, pad: 0 },
+          margin:{ l: 40, r: 0, b: 0, t: 10, pad: 0 },
           xaxis: { showline: false, zeroline: false, ticks: ''},
           yaxis: { showline: false, zeroline: false, ticks: ''},
           //showlegend: false,
